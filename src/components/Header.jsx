@@ -57,16 +57,43 @@ export default function Header() {
         <span>NOTICE: THIS WEBSITE IS FOR EDUCATIONAL PURPOSES ONLY</span>
       </div>
       
-      {/* Main Navbar */}
+            {/* Main Navbar */}
       <div className="h-20 bg-surface-container-lowest/95 backdrop-blur-md px-margin-mobile lg:px-margin flex items-center justify-between relative">
-        <div className="flex items-center gap-space-md">
-          <div className="relative flex items-center justify-center">
-            <img alt="Galóng Galínda Logo" className="w-11 h-11 ring-primary/20" src="/gallery/sticker%20(2).webp" />
+        
+        {/* UPPER LEFT LOGO WITH KINETIC ENERGY */}
+        <Link to="/" className="flex items-center gap-space-md group">
+          
+          {/* Animated Spinning Icon Container */}
+          <div className="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
+            {/* Spinning Rings */}
+            <svg className="absolute inset-0 w-full h-full animate-[spin_12s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite] transition-all duration-300" fill="none" viewBox="0 0 400 400">
+              <circle className="text-primary/50" cx="200" cy="200" r="185" stroke="currentColor" strokeDasharray="20 15" strokeWidth="12" />
+              <circle className="text-tertiary/40" cx="200" cy="200" r="145" stroke="currentColor" strokeDasharray="10 20" strokeWidth="8" />
+            </svg>
+            
+            {/* Inner Red Glow on Hover */}
+            <div className="absolute inset-2 rounded-full bg-primary/20 blur-[4px] group-hover:animate-pulse"></div>
+            
+            {/* Physical Logo */}
+            <img 
+              alt="Galóng Galínda Logo" 
+              className="relative z-10 w-10 h-10 object-contain rounded-full bg-surface-container-lowest shadow-sm" 
+              src="/gallery/sticker%20(2).webp" 
+            />
           </div>
+
+          {/* Text Container (Title + Motto) */}
           <div className="flex flex-col">
-            <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-tight">GALÓNG GALÍNDA</span>
-            <span className="font-label-badge text-label-badge text-secondary font-semibold uppercase tracking-wider">Patinikang Gâlo, Ipákit Ing Galíng Da</span>
+            <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-tight group-hover:text-tertiary transition-colors duration-300">
+              GALÓNG GALÍNDA
+            </span>
+            <span className="font-label-badge text-label-badge text-secondary font-semibold uppercase tracking-wider">
+              Patinikang Gâlo, Ipákit Ing Galíng Da
+            </span>
           </div>
+
+        </Link>
+
         </div>
         
         {/* Desktop Navigation */}
