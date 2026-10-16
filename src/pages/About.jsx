@@ -12,8 +12,8 @@ export default function About() {
     {
       category: "Budget & Finance",
       members: [
-        { role: "Budget", name: "Alfreda Joy E. Magisa", img: "/gallery/team/pic%20(3).jpg" },
-        { role: "Budget", name: "Nicole A. Quinto", img: "/gallery/team/pic%20(6).jpg" },
+        { role: "Budget", name: "Alfreda Joy E. Magisa", img: "/gallery/team/pic%20(6).jpg" },
+        { role: "Budget", name: "Nicole A. Quinto", img: "/gallery/team/pic%20(3).jpg" },
       ]
     },
     {
