@@ -33,7 +33,6 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Helper to apply active state styles to the current page
-  // Added an 'isMobile' flag so the links look good in a vertical list
   const navClass = (targetPath, isMobile = false) => {
     const baseStyle = isMobile 
       ? "w-full py-3 px-4 rounded-lg flex items-center transition-colors font-label-lg text-label-lg"
@@ -57,7 +56,7 @@ export default function Header() {
         <span>NOTICE: THIS WEBSITE IS FOR EDUCATIONAL PURPOSES ONLY</span>
       </div>
       
-            {/* Main Navbar */}
+      {/* Main Navbar */}
       <div className="h-20 bg-surface-container-lowest/95 backdrop-blur-md px-margin-mobile lg:px-margin flex items-center justify-between relative">
         
         {/* UPPER LEFT LOGO WITH KINETIC ENERGY */}
@@ -93,8 +92,6 @@ export default function Header() {
           </div>
 
         </Link>
-
-        </div>
         
         {/* Desktop Navigation */}
         <nav className="hidden xl:flex items-center gap-space-lg h-full">
@@ -106,6 +103,7 @@ export default function Header() {
           <Link to="/contact" className={navClass('/contact')}>Contact Us</Link>
         </nav>
         
+        {/* Right Side Icons */}
         <div className="flex items-center gap-space-md">
           <button 
             onClick={toggleDarkMode}
@@ -128,7 +126,7 @@ export default function Header() {
             </span>
           </button>
         </div>
-      </div>
+      </div> {/* <-- This is the correct placement for the closing div! */}
 
       {/* Mobile Navigation Dropdown */}
       {isMobileMenuOpen && (
@@ -139,9 +137,7 @@ export default function Header() {
           <Link to="/events" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/events', true)}>Gallery & Events</Link>
           <Link to="/faq" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/faq', true)}>FAQs</Link>
           <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/contact', true)}>Contact Us</Link>
-          
         </nav>
-        
       )}
     </header>
   );
