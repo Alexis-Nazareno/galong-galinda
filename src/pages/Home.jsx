@@ -18,7 +18,7 @@ export default function Home() {
               <div className="lg:col-span-7 flex flex-col gap-space-lg relative z-10">
                 <div className="flex flex-col gap-space-sm">
                   <h1 className="font-display-hero text-display-hero-mobile lg:text-display-hero text-on-surface tracking-tight leading-[1.08]">
-                    We are the <span className="text-primary underline decoration-primary/30 decoration-wavy decoration-2">Galóng Galínda</span> Event Organization
+                    We are the <span className="text-primary">Galóng Galínda</span> Event Organization
                   </h1>
                   <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl pt-space-xs">
                     <span className="font-semibold text-primary">
