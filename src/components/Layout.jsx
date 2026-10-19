@@ -1,5 +1,6 @@
 import Header from './Header';
 import Footer from './Footer';
+import BackgroundMusic from './BackgroundMusic';
 import { Outlet } from 'react-router-dom';
 
 export default function Layout() {
@@ -9,6 +10,7 @@ export default function Layout() {
       <main className="w-full pt-[112px] bg-background flex-1 flex flex-col">
         <Outlet />
       </main>
+      <BackgroundMusic />
       <Footer />
     </div>
   );

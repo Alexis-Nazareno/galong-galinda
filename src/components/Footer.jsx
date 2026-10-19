@@ -7,17 +7,10 @@ export default function Footer() {
         
         <div className="flex flex-col gap-space-md">
           <div className="flex items-center gap-space-sm">
-            <img alt="Galóng Galínda Emblem" className="w-8 h-8 rounded-full object-cover" src="/gallery/sticker%20(2).webp" />
+            <img alt="Galóng Galínda Emblem" className="w-8 h-8 rounded-full object-contain" src="/gallery/galong-galinda-logo.png" />
             <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">GALÓNG GALÍNDA</span>
           </div>
           <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Empowering physical education educators, student-athletes, and sports leaders across Central Luzon through kinetic mastery, sports pedagogy, and authentic collegiate community leadership.</p>
-          <div className="flex items-center gap-space-sm pt-space-xs">
-            <a href="https://www.facebook.com/share/1C6jJJMqRT/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-all shadow-sm" title="Visit Galóng Galínda on Facebook">
-              <svg className="w-[20px] h-[20px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
-              </svg>
-            </a>
-          </div>
         </div>
 
         <div className="flex flex-col gap-space-md">
@@ -25,7 +18,8 @@ export default function Footer() {
           <ul className="flex flex-col gap-space-xs">
             <li className="py-1"><Link to="/" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Home</Link></li>
             <li className="py-1"><Link to="/about" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">About Organization</Link></li>
-            <li className="py-1"><Link to="/services" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Products & Services</Link></li>
+            <li className="py-1"><Link to="/products" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Products</Link></li>
+            <li className="py-1"><Link to="/services" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Services</Link></li>
             <li className="py-1"><Link to="/events" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Events & Documentation</Link></li>
             <li className="py-1"><Link to="/faq" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Frequently Asked Questions</Link></li>
             <li className="py-1"><Link to="/contact" className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Contact Campus Office</Link></li>
@@ -35,18 +29,24 @@ export default function Footer() {
         <div className="flex flex-col gap-space-md">
           <h4 className="font-headline-sm text-headline-sm text-on-surface font-semibold">Campus & Contact</h4>
           <div className="flex flex-col gap-space-sm text-on-surface-variant font-body-sm text-body-sm">
-            <div className="flex items-start gap-space-xs">
+            <a href="https://www.google.com/maps/search/?api=1&query=City+College+of+Angeles%2C+Arayat+Blvd%2C+Barangay+Pampang%2C+Angeles+City%2C+Pampanga" target="_blank" rel="noopener noreferrer" aria-label="Get directions to City College of Angeles" className="flex items-start gap-space-xs transition-colors hover:text-primary">
               <span className="material-symbols-outlined text-primary text-[18px] mt-0.5">location_on</span>
               <span>Arayat Blvd., Brgy. Pampang, Angeles City, Pampanga</span>
-            </div>
-            <div className="flex items-center gap-space-xs">
+            </a>
+            <a href="tel:09563871771" aria-label="Call Galóng Galínda at 0956 387 1771" className="flex items-center gap-space-xs transition-colors hover:text-primary">
               <span className="material-symbols-outlined text-primary text-[18px]">call</span>
               <span>0956 387 1771</span>
-            </div>
-            <div className="flex items-center gap-space-xs">
+            </a>
+            <a href="mailto:galonggalinda@gmail.com" aria-label="Email Galóng Galínda at galonggalinda@gmail.com" className="flex items-center gap-space-xs transition-colors hover:text-primary">
               <span className="material-symbols-outlined text-primary text-[18px]">mail</span>
               <span>galonggalinda@gmail.com</span>
-            </div>
+            </a>
+            <a href="https://www.facebook.com/share/1C6jJJMqRT/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-space-xs text-on-surface-variant hover:text-primary transition-colors">
+              <svg className="w-[18px] h-[18px] fill-current text-primary" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+              </svg>
+              <span>Galóng Galínda on Facebook</span>
+            </a>
           </div>
         </div>
 

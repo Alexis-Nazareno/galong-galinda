@@ -1,4 +1,37 @@
+import { useState } from 'react';
+
 export default function Contact() {
+  const [submissionStatus, setSubmissionStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    setSubmissionStatus('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+
+      if (!response.ok) {
+        setSubmissionStatus('Hindi naipadala ang request. Pakisubukan muli.');
+        return;
+      }
+
+      form.reset();
+      setSubmissionStatus('Naipadala na ang request. Maraming salamat sa pag-contact sa amin!');
+    } catch (error) {
+      console.error('Error submitting contact request:', error);
+      setSubmissionStatus('Nagkaroon ng problema sa pagpapadala. Pakisuri ang iyong koneksyon at subukan muli.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main>
       <div className="flex flex-col w-full">
@@ -33,27 +66,55 @@ export default function Contact() {
                 
                 {/* Contact Cards */}
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50">
+                  <h2 className="font-headline text-xl font-bold text-on-surface">Visit Us</h2>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=City+College+of+Angeles%2C+Arayat+Blvd%2C+Barangay+Pampang%2C+Angeles+City%2C+Pampanga"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Get directions to the Campus Office in Google Maps"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50 transition-colors hover:border-primary/50"
+                  >
                     <span className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center material-symbols-outlined shrink-0">location_on</span>
                     <div>
                       <span className="font-label-badge text-[10px] text-on-surface-variant uppercase block mb-0.5">Campus Office</span>
-                      <p className="font-body text-sm font-semibold text-on-surface">Arayat Blvd., Angeles City</p>
+                      <p className="font-body text-sm font-semibold text-on-surface">Arayat Blvd., Barangay Pampang, Angeles City, Pampanga, Philippines</p>
+                      <p className="mt-1 font-body text-xs text-on-surface-variant">Monday to Friday: 8:00 AM–5:00 PM PHT</p>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50">
+                  </a>
+                  <h2 className="mt-3 font-headline text-xl font-bold text-on-surface">Contact Us</h2>
+                  <a
+                    href="tel:09563871771"
+                    aria-label="Call Event Manager Angela E. Ellegue at 0956 387 1771"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50 transition-colors hover:border-secondary/50"
+                  >
                     <span className="w-12 h-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center material-symbols-outlined shrink-0">call</span>
                     <div>
-                      <span className="font-label-badge text-[10px] text-on-surface-variant uppercase block mb-0.5">Hotline</span>
-                      <p className="font-body text-sm font-semibold text-on-surface">0956 387 1771</p>
+                      <span className="font-label-badge text-[10px] text-on-surface-variant uppercase block mb-0.5">Event Manager</span>
+                      <p className="font-body text-sm font-semibold text-on-surface">Angela E. Ellegue</p>
+                      <p className="mt-1 font-body text-sm font-semibold text-on-surface">Contact Number: 0956 387 1771</p>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50">
+                  </a>
+                  <a
+                    href="mailto:galonggalinda@gmail.com"
+                    aria-label="Email Galóng Galínda at galonggalinda@gmail.com"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border border-surface-container-high/50 transition-colors hover:border-tertiary/50"
+                  >
                     <span className="w-12 h-12 rounded-full bg-tertiary/10 text-tertiary flex items-center justify-center material-symbols-outlined shrink-0">mail</span>
                     <div>
                       <span className="font-label-badge text-[10px] text-on-surface-variant uppercase block mb-0.5">Official Inquiries</span>
                       <p className="font-body text-sm font-semibold text-on-surface">galonggalinda@gmail.com</p>
                     </div>
-                  </div>
+                  </a>
+                  <a
+                    href="https://www.facebook.com/share/1C6jJJMqRT/?mibextid=wwXIfr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-label text-sm font-bold text-on-primary transition-colors hover:bg-primary-container"
+                    aria-label="Follow Galóng Galínda on Facebook"
+                  >
+                    <span className="material-symbols-outlined" aria-hidden="true">thumb_up</span>
+                    <span>Follow us on FB</span>
+                  </a>
                 </div>
 
                 {/* Interactive Google Map Box */}
@@ -85,8 +146,24 @@ export default function Contact() {
                     <p className="font-body text-sm text-on-surface-variant mt-1">Our student liaison officers will respond promptly.</p>
                   </div>
                   
-                  {/* UPDATE THIS ACTION URL WITH YOUR FORMSPREE ENDPOINT */}
-                  <form className="flex flex-col gap-6" action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST">
+                  <form
+                    className="flex flex-col gap-6"
+                    action="https://formspree.io/f/xoejjklz"
+                    method="POST"
+                    onSubmit={handleSubmit}
+                  >
+                    {submissionStatus && (
+                      <p
+                        className={`rounded-lg px-4 py-3 text-sm font-semibold ${
+                          submissionStatus.startsWith('Naipadala')
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                        role={submissionStatus.startsWith('Naipadala') ? 'status' : 'alert'}
+                      >
+                        {submissionStatus}
+                      </p>
+                    )}
                     
                     {/* Offering Selection Radio */}
                     <div>
@@ -129,8 +206,8 @@ export default function Contact() {
                         <input name="name" className="w-full px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow" placeholder="Juan Dela Cruz" required type="text" />
                       </div>
                       <div>
-                        <label className="block font-label text-xs font-bold text-on-surface mb-1.5 uppercase tracking-wide">Organization *</label>
-                        <input name="organization" className="w-full px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow" placeholder="CCA Sports Club" required type="text" />
+                        <label className="block font-label text-xs font-bold text-on-surface mb-1.5 uppercase tracking-wide">Organization (Optional)</label>
+                        <input name="organization" className="w-full px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow" placeholder="CCA Sports Club" type="text" required={false} />
                       </div>
                     </div>
 
@@ -141,7 +218,21 @@ export default function Contact() {
                       </div>
                       <div>
                         <label className="block font-label text-xs font-bold text-on-surface mb-1.5 uppercase tracking-wide">Contact Number *</label>
-                        <input name="contact_number" className="w-full px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow" placeholder="09XX XXX XXXX" required type="tel" />
+                        <input
+                          name="contact_number"
+                          className="w-full px-4 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow"
+                          placeholder="09XX XXX XXXX"
+                          required
+                          type="tel"
+                          inputMode="numeric"
+                          autoComplete="tel-national"
+                          maxLength={11}
+                          pattern="09[0-9]{9}"
+                          title="Enter an 11-digit Philippine mobile number starting with 09."
+                          onInput={(event) => {
+                            event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 11);
+                          }}
+                        />
                       </div>
                     </div>
 
@@ -150,8 +241,8 @@ export default function Contact() {
                       <textarea name="message" className="w-full px-4 py-3 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow resize-y min-h-[100px]" placeholder="Specify tournament dates, number of courts, or quantity of products needed..." rows="3"></textarea>
                     </div>
                     
-                    <button className="w-full mt-2 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label text-sm font-bold uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2" type="submit">
-                      <span>Send Request</span>
+                    <button className="w-full mt-2 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label text-sm font-bold uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-70" type="submit" disabled={isSubmitting}>
+                      <span>{isSubmitting ? 'Sending...' : 'Send Request'}</span>
                       <span className="material-symbols-outlined text-[18px]">send</span>
                     </button>
                   </form>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import LikeButton from '../components/LikeButton';
 
 export default function Home() {
   return (
@@ -29,8 +30,9 @@ export default function Home() {
                 
                 {/* Dual CTAs */}
                 <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
-                  <Link to="/services" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_14px_rgba(178,1,18,0.28)] hover:-translate-y-0.5">
-                    <span>Product &amp; Services</span>
+                  <Link to="/events#section-upcoming" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_14px_rgba(178,1,18,0.28)] hover:-translate-y-0.5">
+                    <span className="material-symbols-outlined text-[18px]">calendar_month</span>
+                    <span>Upcoming Events / Events Calendar</span>
                   </Link>
                   <Link to="/contact" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-surface-container text-secondary hover:bg-secondary hover:text-on-secondary font-label-lg text-label-lg transition-all shadow-sm">
                     <span className="material-symbols-outlined text-[18px]">event_available</span>
@@ -51,7 +53,7 @@ export default function Home() {
                   <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-primary-fixed/60 via-surface-container to-secondary-fixed/50 blur-xl opacity-75"></div>
                   {/* Central Phoenix Emblem Container */}
                   <div className="relative z-10 w-72 sm:w-84 h-72 sm:h-84 rounded-full p-2 flex items-center justify-center">
-                    <img alt="Galóng Galínda Phoenix Emblem" className="w-full h-full object-contain rounded-full" src="/gallery/sticker%20(2).webp" />
+                    <img alt="Galóng Galínda Phoenix Emblem" className="w-full h-full rounded-full object-contain" src="/gallery/galong-galinda-logo-clean.png" />
                   </div>
                   {/* Floating Kinetic Badges */}
                   <div className="absolute -top-2 right-4 z-20 px-3.5 py-2 rounded-xl bg-surface-container-lowest shadow-md flex items-center gap-2">
@@ -107,6 +109,86 @@ export default function Home() {
           </div>
         </section>
 
+        {/* SECTION 3: EVENT HIGHLIGHTS */}
+        <section className="w-full bg-background py-space-xl" aria-labelledby="home-highlights-title">
+          <div className="mx-auto flex max-w-7xl flex-col gap-space-xl px-margin-mobile lg:px-margin">
+            <div className="flex flex-col gap-space-xs">
+              <span className="font-label-badge text-label-badge font-bold uppercase tracking-[0.2em] text-primary">Moments in Motion</span>
+              <h2 id="home-highlights-title" className="font-headline-lg text-headline-lg-mobile font-bold text-on-surface lg:text-headline-lg">
+                Event Highlights
+              </h2>
+              <p className="max-w-2xl font-body-md text-body-md leading-relaxed text-on-surface-variant">
+                A look at the activities, sports, and learning experiences brought together by Galóng Galínda.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <Link to="/events" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+                <div className="h-56 overflow-hidden bg-surface-container">
+                  <img
+                    src="/gallery/pe%20(2).jpg"
+                    alt="Students taking part in a PE Days activity"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5">
+                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-primary">Campus Activities</span>
+                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">PE Days</h3>
+                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
+                    Celebrating movement, teamwork, and school spirit through physical activities.
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
+                    Explore events <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                  </span>
+                </div>
+              </Link>
+
+              <Link to="/services#officiating" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+                <div className="h-56 overflow-hidden bg-surface-container">
+                  <img
+                    src="/gallery/basketball-officiating-session.jpeg"
+                    alt="Basketball officiating instruction during a community sports session"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5">
+                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-secondary">Sports Services</span>
+                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">Officiating</h3>
+                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
+                    Supporting fair play and organized competition through sports officiating.
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
+                    View services <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                  </span>
+                </div>
+              </Link>
+
+              <Link to="/services#officiating" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary md:col-span-2 lg:col-span-1">
+                <div className="h-56 overflow-hidden bg-surface-container">
+                  <img
+                    src="/gallery/sports-festival-teamwork.jpeg"
+                    alt="Students and organizers gathered at a school sports festival"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5">
+                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-tertiary">Seminar Workshop</span>
+                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">Volleyball Officiating</h3>
+                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
+                    Building practical officiating skills and teamwork through hands-on sports activities.
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
+                    Learn more <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                  </span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* SECTION 3: SIGNATURE OFFERINGS PREVIEW */}
         <section className="w-full bg-surface-container-lowest py-space-xl">
           <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin flex flex-col gap-space-xl">
@@ -114,70 +196,62 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
               <div className="flex flex-col gap-space-xs">
                 <h2 className="font-headline-lg text-headline-lg-mobile lg:text-headline-lg text-on-surface font-bold">
-                  Products &amp; Services
+                  Our Offerings
                 </h2>
               </div>
             </div>
             
-            {/* Offerings Bento Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter lg:grid-cols-3">
-              
-              {/* Offering 1: Sports Officiating Services */}
-              <div className="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-sm hover:shadow-md transition-all group">
-                <div className="h-44 w-full relative overflow-hidden bg-surface-container-high">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/so%20(5).jpg"  />
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface-container-lowest/90 backdrop-blur font-label-badge text-label-badge text-secondary uppercase">Official Service</span>
+            <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
+              <Link to="/services#officiating" className="flex flex-col rounded-2xl bg-surface-container overflow-hidden shadow-sm hover:shadow-md transition-all group">
+                <div className="relative h-48 w-full shrink-0 overflow-hidden bg-surface-container-high sm:h-56">
+                  <img alt="Galóng Galínda sports officiating team" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/so%20(5).jpg" />
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface-container-lowest/90 backdrop-blur font-label-badge text-label-badge text-secondary uppercase">Services</span>
                 </div>
-                <div className="p-space-md flex flex-col flex-1 justify-between gap-space-sm">
-                  <div className="flex flex-col">
-                    <span className="font-label-md text-label-md text-secondary">Sports Event Management</span>
+                <div className="flex flex-1 items-start gap-4 p-5 sm:p-6">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary material-symbols-outlined text-[22px] sm:h-12 sm:w-12">sports</span>
+                  <div className="min-w-0 max-w-xl">
                     <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">Officiating Services</h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-                      Professional officiating, referee clinics, and court marshaling for intramurals, invitational leagues, and inter-collegiate competitions.
+                    <p className="mt-2 max-w-[42ch] font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                      Professional officiating, referee clinics, and court marshaling for intramurals and inter-collegiate competitions.
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
 
-              {/* Offering 2: Nutrifit Crackers */}
-              <div className="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-sm hover:shadow-md transition-all group">
-                <div className="h-44 w-full relative overflow-hidden bg-surface-container-high">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/crackers.jpg"  />
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface-container-lowest/90 backdrop-blur font-label-badge text-label-badge text-primary uppercase">Nutrition Product</span>
-                </div>
-                <div className="p-space-md flex flex-col flex-1 justify-between gap-space-sm">
-                  <div className="flex flex-col">
-                    <span className="font-label-md text-label-md text-primary">Energy Snack</span>
-                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">Nutrifit Crackers</h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-                      Whole-grain fortified crackers designed to provide a convenient source of energy for active students and athletes.
-                    </p>
+              <div className="flex flex-col rounded-2xl bg-surface-container overflow-hidden shadow-sm">
+                <div className="flex items-center gap-4 border-b border-surface-container-high/60 p-5 sm:p-6">
+                  <span className="w-12 h-12 shrink-0 rounded-xl bg-primary/10 text-primary flex items-center justify-center material-symbols-outlined text-[24px]">shopping_bag</span>
+                  <div className="min-w-0">
+                    <span className="font-label-badge text-label-badge uppercase text-primary">Products</span>
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">Made for active days</h3>
                   </div>
                 </div>
-              </div>
-
-              {/* Offering 3: ArmFeet Deodorant Powder */}
-              <div className="flex flex-col rounded-xl bg-surface-container overflow-hidden shadow-sm hover:shadow-md transition-all group">
-                <div className="h-44 w-full relative overflow-hidden bg-surface-container-high">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/sticker.webp"/>
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-surface-container-lowest/90 backdrop-blur font-label-badge text-label-badge text-tertiary-container uppercase">Hygiene Product</span>
+                <div className="grid flex-1 grid-cols-1 gap-3 p-4 sm:p-5 lg:grid-cols-2">
+                  <Link to="/products#nutrifit" className="group flex min-w-0 flex-col overflow-hidden rounded-xl bg-surface-container-lowest">
+                    <div className="h-48 shrink-0 overflow-hidden bg-surface-container-high">
+                      <img alt="Nutrifit Crackers" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" src="/gallery/crackers.jpg" />
+                    </div>
+                    <div className="flex-1 p-4">
+                      <h4 className="font-label-lg text-label-lg font-bold text-on-surface">Nutrifit Crackers</h4>
+                      <p className="mt-1 max-w-[32ch] font-body-sm text-body-sm text-on-surface-variant">A convenient snack for active students and athletes.</p>
+                    </div>
+                  </Link>
+                  <Link to="/products#armfeet" className="group flex min-w-0 flex-col overflow-hidden rounded-xl bg-surface-container-lowest">
+                    <div className="h-48 shrink-0 overflow-hidden bg-white">
+                      <img alt="ArmFeet deodorant powder" className="h-full w-full scale-150 object-cover object-center transition-transform duration-300 group-hover:scale-[1.6]" src="/gallery/crackers-armfeet.jpg" />
+                    </div>
+                    <div className="flex-1 p-4">
+                      <h4 className="font-label-lg text-label-lg font-bold text-on-surface">ArmFeet Powder</h4>
+                      <p className="mt-1 max-w-[32ch] font-body-sm text-body-sm text-on-surface-variant">Underarm and foot care for active days.</p>
+                    </div>
+                  </Link>
                 </div>
-                <div className="p-space-md flex flex-col flex-1 justify-between gap-space-sm">
-                  <div className="flex flex-col">
-                    <span className="font-label-md text-label-md text-tertiary-container">2-in-1 Underarm &amp; Foot Care</span>
-                    <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold">ArmFeet Deodorant Powder</h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-                      Dual-action odor and moisture control deodorant powder (40g) keeping athletes and students fresh during sports, training, and active days.
-                    </p>
-                  </div>
-                </div>
               </div>
-
             </div>
           </div>
         </section>
 
-        <section className="w-full bg-surface-container-high/40 py-16 lg:py-24">
+        <section className="w-full bg-surface-container-low py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col gap-12">
             <div className="flex flex-col items-center text-center gap-3 max-w-2xl mx-auto">
               <span className="font-label-badge text-[11px] text-primary font-bold uppercase tracking-wider">Testimonials</span>
@@ -205,12 +279,13 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-4 pt-6 mt-6 border-t border-surface-container-high/50">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">MR</div>
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center material-symbols-outlined text-primary text-[20px]" aria-hidden="true">person</div>
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm text-on-surface">Mark Ryan Dizon</span>
-                    <span className="text-xs text-on-surface-variant">BSCS Participant</span>
+                    <span className="font-bold text-sm text-on-surface">Anonymous Participant</span>
+                    <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
+                <LikeButton label="Like this participant comment" className="self-start mt-4" />
               </div>
 
               {/* Review 2 */}
@@ -228,12 +303,13 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-4 pt-6 mt-6 border-t border-surface-container-high/50">
-                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center font-bold text-secondary text-sm">CL</div>
+                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center material-symbols-outlined text-secondary text-[20px]" aria-hidden="true">person</div>
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm text-on-surface">Clarissa L. Santos</span>
-                    <span className="text-xs text-on-surface-variant">BPE Participant</span>
+                    <span className="font-bold text-sm text-on-surface">Anonymous Participant</span>
+                    <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
+                <LikeButton label="Like this participant comment" className="self-start mt-4" />
               </div>
 
               {/* Review 3 */}
@@ -251,12 +327,13 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-4 pt-6 mt-6 border-t border-surface-container-high/50">
-                  <div className="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center font-bold text-tertiary text-sm">JE</div>
+                  <div className="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center material-symbols-outlined text-tertiary text-[20px]" aria-hidden="true">person</div>
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm text-on-surface">Jerome Encarnacion</span>
-                    <span className="text-xs text-on-surface-variant">BLIS Participant</span>
+                    <span className="font-bold text-sm text-on-surface">Anonymous Participant</span>
+                    <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
+                <LikeButton label="Like this participant comment" className="self-start mt-4" />
               </div>
             </div>
           </div>
