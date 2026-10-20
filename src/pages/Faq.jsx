@@ -39,7 +39,7 @@ export default function Faq() {
         <ul className="mt-space-sm list-disc pl-5 space-y-1 leading-relaxed">
           <li>Upcoming sports events, student workshops, and coaching modules.</li>
           <li>High-resolution event photo galleries and competition recaps.</li>
-          <li>Physical fitness training products including Nutrifit snacks and Armfit.</li>
+          <li>Physical fitness training products including Nutrifit snacks and Armfit Powder.</li>
           <li>Sports officiating service profiles, guidelines, and proposal dispatcher forms.</li>
         </ul>
       )

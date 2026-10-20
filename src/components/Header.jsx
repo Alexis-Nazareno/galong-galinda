@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import SiteSearch from './SiteSearch';
 
 export default function Header() {
   const location = useLocation();
@@ -31,6 +32,7 @@ export default function Header() {
   
   // State to manage mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Helper to apply active state styles to the current page
   const navClass = (targetPath, isMobile = false) => {
@@ -74,11 +76,13 @@ export default function Header() {
             <div className="absolute inset-2 rounded-full bg-primary/20 blur-[4px] group-hover:animate-pulse"></div>
             
             {/* Physical Logo */}
-            <img 
-              alt="Galóng Galínda Logo" 
-              className="relative z-10 w-10 h-10 object-contain rounded-full bg-surface-container-lowest shadow-sm" 
-              src="/gallery/sticker%20(2).webp" 
-            />
+            <div className="relative z-10 w-10 h-10 overflow-hidden rounded-full">
+              <img
+                alt="Galóng Galínda Logo"
+                className="block h-full w-full rounded-full object-contain"
+                src="/gallery/galong-galinda-logo-clean.png"
+              />
+            </div>
           </div>
 
           {/* Text Container (Title + Motto) */}
@@ -97,7 +101,8 @@ export default function Header() {
         <nav className="hidden xl:flex items-center gap-space-lg h-full">
           <Link to="/" className={navClass('/')}>Home</Link>
           <Link to="/about" className={navClass('/about')}>About Us</Link>
-          <Link to="/services" className={navClass('/services')}>Products & Services</Link>
+          <Link to="/products" className={navClass('/products')}>Products</Link>
+          <Link to="/services" className={navClass('/services')}>Services</Link>
           <Link to="/events" className={navClass('/events')}>Gallery & Events</Link>
           <Link to="/faq" className={navClass('/faq')}>FAQs</Link>
           <Link to="/contact" className={navClass('/contact')}>Contact Us</Link>
@@ -105,6 +110,19 @@ export default function Header() {
         
         {/* Right Side Icons */}
         <div className="flex items-center gap-space-md">
+          <button
+            type="button"
+            onClick={() => {
+              setIsSearchOpen(true);
+              setIsMobileMenuOpen(false);
+            }}
+            className="flex items-center justify-center rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
+            aria-label="Search website"
+            aria-haspopup="dialog"
+            aria-expanded={isSearchOpen}
+          >
+            <span className="material-symbols-outlined text-[22px]" aria-hidden="true">search</span>
+          </button>
           <button 
             onClick={toggleDarkMode}
             className="p-2 rounded-full bg-surface-container hover:bg-surface-container-highest text-on-surface-variant transition-colors flex items-center justify-center"
@@ -133,12 +151,14 @@ export default function Header() {
         <nav className="xl:hidden absolute top-full left-0 w-full bg-surface-container-lowest border-t border-surface-container-highest shadow-xl flex flex-col p-4 gap-2 pb-6">
           <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/', true)}>Home</Link>
           <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/about', true)}>About Us</Link>
-          <Link to="/services" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/services', true)}>Products & Services</Link>
+          <Link to="/products" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/products', true)}>Products</Link>
+          <Link to="/services" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/services', true)}>Services</Link>
           <Link to="/events" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/events', true)}>Gallery & Events</Link>
           <Link to="/faq" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/faq', true)}>FAQs</Link>
           <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={navClass('/contact', true)}>Contact Us</Link>
         </nav>
       )}
+      {isSearchOpen && <SiteSearch onClose={() => setIsSearchOpen(false)} />}
     </header>
   );
 }
