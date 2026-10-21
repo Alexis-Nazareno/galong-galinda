@@ -1,7 +1,57 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LikeButton from '../components/LikeButton';
 
 export default function Home() {
+  const [expandedHighlight, setExpandedHighlight] = useState(null);
+  const highlights = [
+    {
+      id: 'pe-days',
+      category: 'Campus Activities',
+      title: 'PE Days',
+      image: '/gallery/pe%20(2).jpg',
+      imageAlt: 'Students taking part in a PE Days Zumba competition',
+      description: 'Celebrating movement, teamwork, and school spirit through physical activities.',
+      details: 'PE Days brings students together for campus activities that encourage participation, teamwork, and school spirit.',
+      photos: [
+        { src: '/gallery/pe%20(2).jpg', alt: 'Students performing in the PE Days Zumba competition' },
+        { src: '/gallery/pe%20(4).jpg', alt: 'Students gathered during a PE Days ceremony' }
+      ],
+      link: '/events#section-upcoming',
+      action: 'Explore events'
+    },
+    {
+      id: 'officiating',
+      category: 'Sports Services',
+      title: 'Officiating',
+      image: '/gallery/basketball-officiating-session.jpeg',
+      imageAlt: 'Basketball officiating instruction during a community sports session',
+      description: 'Supporting fair play and organized competition through sports officiating.',
+      details: 'Galóng Galínda offers officiating for basketball, volleyball, swimming, and badminton, as well as event organizing for PE Days, culminating activities, and school events.',
+      photos: [
+        { src: '/gallery/basketball-officiating-session.jpeg', alt: 'Basketball officiating instruction' },
+        { src: '/gallery/basketball-court-game.jpeg', alt: 'Basketball game in progress at Pampanga People’s Gym' }
+      ],
+      link: '/services#officiating',
+      action: 'View services'
+    },
+    {
+      id: 'volleyball-workshop',
+      category: 'Seminar Workshop',
+      title: 'Volleyball Officiating',
+      image: '/gallery/volleyball-officiating-session.jpeg',
+      imageAlt: 'Volleyball officiating seminar in a gym',
+      description: 'Building practical officiating skills and teamwork through hands-on sports activities.',
+      details: 'A seminar-workshop focused on volleyball officiating, with participants learning through demonstrations and practical activities.',
+      photos: [
+        { src: '/gallery/volleyball-officiating-session.jpeg', alt: 'Volleyball officiating workshop in a gym' },
+        { src: '/gallery/so%20(6).jpg', alt: 'Participants at an interactive volleyball seminar workshop' }
+      ],
+      link: '/events#section-upcoming',
+      action: 'Learn more'
+    }
+  ];
+
   return (
     <main>
       <div className="flex flex-col w-full">
@@ -122,69 +172,59 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Link to="/events" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
-                <div className="h-56 overflow-hidden bg-surface-container">
-                  <img
-                    src="/gallery/pe%20(2).jpg"
-                    alt="Students taking part in a PE Days activity"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-5">
-                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-primary">Campus Activities</span>
-                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">PE Days</h3>
-                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
-                    Celebrating movement, teamwork, and school spirit through physical activities.
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
-                    Explore events <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
-                  </span>
-                </div>
-              </Link>
+            <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {highlights.map((highlight) => {
+                const isExpanded = expandedHighlight === highlight.id;
+                const detailsId = `highlight-details-${highlight.id}`;
 
-              <Link to="/services#officiating" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
-                <div className="h-56 overflow-hidden bg-surface-container">
-                  <img
-                    src="/gallery/basketball-officiating-session.jpeg"
-                    alt="Basketball officiating instruction during a community sports session"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-5">
-                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-secondary">Sports Services</span>
-                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">Officiating</h3>
-                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
-                    Supporting fair play and organized competition through sports officiating.
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
-                    View services <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
-                  </span>
-                </div>
-              </Link>
-
-              <Link to="/services#officiating" className="group overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary md:col-span-2 lg:col-span-1">
-                <div className="h-56 overflow-hidden bg-surface-container">
-                  <img
-                    src="/gallery/sports-festival-teamwork.jpeg"
-                    alt="Students and organizers gathered at a school sports festival"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-5">
-                  <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-tertiary">Seminar Workshop</span>
-                  <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">Volleyball Officiating</h3>
-                  <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
-                    Building practical officiating skills and teamwork through hands-on sports activities.
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
-                    Learn more <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
-                  </span>
-                </div>
-              </Link>
+                return (
+                  <article key={highlight.id} className="overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <button
+                      type="button"
+                      aria-expanded={isExpanded}
+                      aria-controls={detailsId}
+                      onClick={() => setExpandedHighlight(isExpanded ? null : highlight.id)}
+                      className="group block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-primary"
+                    >
+                      <div className="h-56 overflow-hidden bg-surface-container">
+                        <img
+                          src={highlight.image}
+                          alt={highlight.imageAlt}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="p-5">
+                        <span className="font-label-badge text-label-badge font-bold uppercase tracking-wider text-primary">{highlight.category}</span>
+                        <h3 className="mt-2 font-headline-sm text-headline-sm font-bold text-on-surface">{highlight.title}</h3>
+                        <p className="mt-2 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">{highlight.description}</p>
+                        <span className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary">
+                          {isExpanded ? 'Hide details' : 'View details'}
+                          <span className={`material-symbols-outlined text-base transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} aria-hidden="true">
+                            expand_more
+                          </span>
+                        </span>
+                      </div>
+                    </button>
+                    {isExpanded && (
+                      <div id={detailsId} className="highlight-details-enter border-t border-surface-container-high/60 p-5">
+                        <p className="font-body-sm text-body-sm leading-relaxed text-on-surface-variant">{highlight.details}</p>
+                        <div className="mt-4 grid grid-cols-2 gap-3">
+                          {highlight.photos.map((photo) => (
+                            <div key={photo.src} className="overflow-hidden rounded-lg bg-surface-container">
+                              <img src={photo.src} alt={photo.alt} className="h-28 w-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" />
+                            </div>
+                          ))}
+                        </div>
+                        <Link to={highlight.link} className="mt-4 inline-flex items-center gap-1 font-label text-sm font-bold text-primary hover:underline">
+                          {highlight.action}
+                          <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                        </Link>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -285,7 +325,7 @@ export default function Home() {
                     <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
-                <LikeButton label="Like this participant comment" className="self-start mt-4" />
+                <LikeButton label="Love this participant comment" icon="favorite" storageKey="testimonial-1" className="self-start mt-4" />
               </div>
 
               {/* Review 2 */}
@@ -309,7 +349,7 @@ export default function Home() {
                     <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
-                <LikeButton label="Like this participant comment" className="self-start mt-4" />
+                <LikeButton label="Love this participant comment" icon="favorite" storageKey="testimonial-2" className="self-start mt-4" />
               </div>
 
               {/* Review 3 */}
@@ -333,7 +373,7 @@ export default function Home() {
                     <span className="text-xs text-on-surface-variant">Event Participant</span>
                   </div>
                 </div>
-                <LikeButton label="Like this participant comment" className="self-start mt-4" />
+                <LikeButton label="Love this participant comment" icon="favorite" storageKey="testimonial-3" className="self-start mt-4" />
               </div>
             </div>
           </div>
