@@ -4,8 +4,8 @@ const promoVideoClass = 'absolute inset-0 h-full w-full';
 
 function PromoVideo({ src, title }) {
   return (
-    <div className="relative flex h-64 flex-col overflow-hidden rounded-2xl bg-black shadow-md">
-      <div className="z-10 flex items-center gap-1.5 border-b border-surface-container-highest/20 bg-inverse-surface/90 px-3 py-2">
+    <div className="relative flex h-64 flex-col overflow-hidden rounded-2xl border-2 border-primary/70 bg-black shadow-lg ring-1 ring-on-surface/15">
+      <div className="z-10 flex items-center gap-1.5 border-b border-white/20 bg-slate-950 px-3 py-2">
         <span className="material-symbols-outlined text-[14px] text-secondary-fixed" aria-hidden="true">movie</span>
         <span className="font-label-badge text-[10px] font-bold uppercase text-secondary-fixed">Promo Reel</span>
       </div>

@@ -60,18 +60,17 @@ export default function BackgroundMusic() {
         onClick={togglePlayback}
         aria-label={isPlaying ? 'Pause background music' : 'Play background music'}
         aria-pressed={isPlaying}
-        className={`inline-flex items-center gap-2 rounded-full bg-primary px-4 py-3 font-label text-sm font-bold text-on-primary shadow-lg transition-colors hover:bg-primary-container focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isPlaying ? 'ring-2 ring-primary/30 ring-offset-2' : ''}`}
+        title={isPlaying ? 'Pause Music' : 'Play Music'}
+        className={`music-control ${isPlaying ? 'is-playing' : ''}`}
       >
-        {isPlaying ? (
-          <span className="flex h-5 items-center gap-0.5" aria-hidden="true">
-            <span className="h-2 w-1 animate-bounce rounded-full bg-current" />
-            <span className="h-4 w-1 animate-bounce rounded-full bg-current [animation-delay:120ms]" />
-            <span className="h-3 w-1 animate-bounce rounded-full bg-current [animation-delay:240ms]" />
-          </span>
-        ) : (
-          <span className="material-symbols-outlined" aria-hidden="true">music_note</span>
-        )}
-        <span>{isPlaying ? 'Pause Music' : 'Play Music'}</span>
+        <span className="material-symbols-outlined music-control-icon" aria-hidden="true">
+          music_note
+        </span>
+        <span className="music-control-waves" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
       </button>
     </div>
   );

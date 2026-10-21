@@ -88,8 +88,8 @@ export default function SiteSearch({ onClose }) {
             aria-controls="site-search-results"
             className="min-w-0 flex-1 bg-transparent py-4 text-base text-on-surface outline-none placeholder:text-on-surface-variant"
           />
-          <button type="button" onClick={onClose} className="rounded-md px-2 py-1 text-xs font-semibold text-on-surface-variant hover:bg-surface-container" aria-label="Close search">
-            ESC
+          <button type="button" onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface" aria-label="Close search">
+            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
           </button>
         </form>
         <div id="site-search-results" className="max-h-[65vh] overflow-y-auto p-2" role="list">

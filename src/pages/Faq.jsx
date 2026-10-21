@@ -309,7 +309,7 @@ export default function Faq() {
           </div>
 
           {/* FAQ Accordion List */}
-          <div className="w-full flex flex-col gap-space-sm">
+          <div key={activeCategory} className="tab-transition-enter w-full flex flex-col gap-space-sm">
             {filteredFaqs.map((faq) => (
               <div key={faq.id} className="faq-card rounded-xl bg-surface-container-lowest border border-surface-container-high/60 shadow-sm transition-all overflow-hidden">
                 <button 

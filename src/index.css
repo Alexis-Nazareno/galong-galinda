@@ -109,3 +109,274 @@
 }
 
 ::-webkit-scrollbar { display: none; }
+
+@keyframes highlight-details-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.highlight-details-enter {
+  animation: highlight-details-enter 280ms ease-out both;
+}
+
+@keyframes page-transition-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition-enter {
+  animation: page-transition-enter 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes tab-transition-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tab-transition-enter {
+  animation: tab-transition-enter 300ms ease-out both;
+}
+
+.page-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgb(250 248 255 / 94%);
+  color: var(--color-primary);
+  animation: page-loading-enter 160ms ease-out both;
+}
+
+.dark .page-loading-overlay {
+  background: rgb(11 14 21 / 94%);
+}
+
+.page-loader-mark {
+  position: relative;
+  display: grid;
+  width: 5rem;
+  height: 5rem;
+  place-items: center;
+}
+
+.page-loader-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+  border-top-color: var(--color-primary);
+  border-right-color: var(--color-tertiary);
+  border-radius: 9999px;
+  animation: page-loader-spin 1s linear infinite;
+}
+
+.page-loader-logo {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 9999px;
+  object-fit: contain;
+  animation: page-loader-pulse 1.2s ease-in-out infinite;
+}
+
+.page-loader-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: page-loader-pulse 1.2s ease-in-out infinite;
+}
+
+.music-control {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #b20112 8%, #e44855 48%, #0050cc 100%);
+  background-size: 180% 180%;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgb(19 27 46 / 22%), inset 0 1px 0 rgb(255 255 255 / 24%);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.music-control:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgb(19 27 46 / 30%), inset 0 1px 0 rgb(255 255 255 / 32%);
+}
+
+.music-control:focus-visible {
+  outline: 3px solid #0050cc;
+  outline-offset: 4px;
+}
+
+.music-control-icon {
+  z-index: 1;
+  font-size: 1.65rem;
+}
+
+.music-control::after {
+  position: absolute;
+  z-index: 0;
+  inset: 2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent 15%,
+    rgb(255 255 255 / 24%) 42%,
+    transparent 68%
+  );
+  background-size: 220% 100%;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+.music-control.is-playing {
+  animation: music-color-wave 5s ease-in-out infinite alternate;
+}
+
+.music-control.is-playing::after {
+  opacity: 1;
+  animation: music-sheen-wave 3s ease-in-out infinite;
+}
+
+.music-control-waves {
+  position: absolute;
+  z-index: 2;
+  right: -0.15rem;
+  bottom: -0.1rem;
+  display: flex;
+  height: 1rem;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  border: 2px solid #ffffff;
+  border-radius: 9999px;
+  background: #0050cc;
+}
+
+.music-control-waves span {
+  width: 2px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.music-control.is-playing .music-control-waves span {
+  animation: music-wave 650ms ease-in-out infinite alternate;
+}
+
+.music-control.is-playing .music-control-waves span:nth-child(2) {
+  animation-delay: 180ms;
+}
+
+.music-control.is-playing .music-control-waves span:nth-child(3) {
+  animation-delay: 360ms;
+}
+
+.music-control.is-playing::before {
+  position: absolute;
+  inset: -5px;
+  border: 2px solid rgb(178 1 18 / 36%);
+  border-radius: inherit;
+  content: "";
+  animation: music-control-pulse 1.8s ease-out infinite;
+}
+
+@keyframes music-wave {
+  to { height: 10px; }
+}
+
+@keyframes music-color-wave {
+  0% { background-position: 0% 45%; }
+  50% { background-position: 100% 55%; }
+  100% { background-position: 25% 100%; }
+}
+
+@keyframes music-sheen-wave {
+  0% { background-position: 140% 0; }
+  100% { background-position: -120% 0; }
+}
+
+@keyframes music-control-pulse {
+  from { opacity: 0.65; transform: scale(0.92); }
+  to { opacity: 0; transform: scale(1.18); }
+}
+
+.featured-event-panel {
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 16%, transparent);
+  background-image:
+    radial-gradient(ellipse at 90% 5%, color-mix(in srgb, var(--color-primary) 11%, transparent), transparent 42%),
+    radial-gradient(ellipse at 8% 96%, color-mix(in srgb, var(--color-secondary) 9%, transparent), transparent 44%),
+    linear-gradient(135deg, var(--color-surface-container-lowest), var(--color-surface-container-low));
+  background-size: 140% 140%, 140% 140%, 100% 100%;
+  animation: featured-panel-glow 12s ease-in-out infinite alternate;
+}
+
+@media (min-width: 1024px) {
+  .featured-event-panel {
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, var(--color-primary) 16%, transparent);
+  }
+}
+
+@keyframes featured-panel-glow {
+  from { background-position: 0% 0%, 100% 100%, center; }
+  to { background-position: 12% 18%, 88% 82%, center; }
+}
+
+@keyframes page-loading-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes page-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes page-loader-pulse {
+  50% { opacity: 0.6; transform: scale(0.96); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight-details-enter,
+  .page-transition-enter,
+  .tab-transition-enter,
+  .page-loader-ring,
+  .page-loader-logo,
+  .page-loader-text,
+  .page-loading-overlay,
+  .featured-event-panel,
+  .music-control,
+  .music-control.is-playing,
+  .music-control.is-playing::after,
+  .music-control.is-playing .music-control-waves span,
+  .music-control.is-playing::before {
+    animation: none;
+  }
+}
