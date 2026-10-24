@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
+import { trackNetworkActivity } from "../utils/networkActivity";
 import LikeButton from "../components/LikeButton";
 
 const normalizeEventStatus = (status = "") =>
@@ -21,15 +22,28 @@ const formatEventCategory = (category = "") => {
 };
 
 const featuredUpcomingEvent = {
+  eventId: "ibm-days-manawari-2026",
   eventTitle: "IBM Days 2026: MANAWARI",
   status: "Special Event",
   eventDate: "October 28–30, 2026",
   eventTime:
     "8:00 A.M. – 5:00 P.M. (Suggested schedule; subject to confirmation)",
   venue: "City College of Angeles",
-  image: "/gallery/ibm-days-manawari.jpg",
+  image: "/gallery/ibm-days-manawari-optimized.jpg",
   description:
     "Get ready for IBM Days 2026: MANAWARI, happening on October 28–30, 2026, at the City College of Angeles! This three-day celebration organized by the Institute of Business and Management brings students together for an exciting experience filled with engaging activities, talent showcases, entertainment, and opportunities to learn and connect. Featuring special performances from Cup of Joe, Adie, and The Band Summers, the event celebrates student creativity, unity, and school spirit. Join us as we make unforgettable memories, discover talents, strengthen friendships, and celebrate the vibrant community of IBM!",
+};
+
+const featuredOngoingEvent = {
+  eventId: "bped-web-fusion",
+  eventTitle: "Event 4: Battle of the Websites — BPED Web Fusion",
+  status: "Ongoing Event",
+  eventDate: "October 26, 2026",
+  eventTime: "1:00 P.M. – 5:00 P.M.",
+  venue: "Bulwagang Angeleno",
+  image: "/gallery/bped-web-fusion-event4.jpeg",
+  description:
+    "Control, Create, and Activate! Teams go head-to-head in a creative battle of website design and digital innovation for BPED Web Fusion.",
 };
 
 const featuredGalleryEvents = [
@@ -80,25 +94,32 @@ export default function Events() {
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSowJhCiO6-TjuZRK0Iho_eaLfsZBey_2lrFYMCuf88hc91ogE6_K7jv9QurxlVkHonQAu2dT9bUsEQ/pub?gid=0&single=true&output=csv";
 
     // Fetch Upcoming Events
+    const finishUpcomingRequest = trackNetworkActivity();
     Papa.parse(upcomingCsvUrl, {
       download: true,
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        finishUpcomingRequest();
         const validUpcoming = results.data.filter(
           (item) => item.eventTitle && item.eventDate,
         );
         setUpcomingEvents(validUpcoming);
       },
-      error: (err) => console.error("Error fetching upcoming events:", err),
+      error: (err) => {
+        finishUpcomingRequest();
+        console.error("Error fetching upcoming events:", err);
+      },
     });
 
     // Fetch Past Gallery Events
+    const finishGalleryRequest = trackNetworkActivity();
     Papa.parse(eventsCsvUrl, {
       download: true,
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        finishGalleryRequest();
         const validData = results.data.filter((item) => item.eventId);
         const seminarWorkshopPhotos = [];
         const groupedEventsMap = validData.reduce((acc, row) => {
@@ -162,16 +183,23 @@ export default function Events() {
         setIsLoading(false);
       },
       error: (error) => {
+        finishGalleryRequest();
         console.error("Error fetching events spreadsheet data:", error);
         setIsLoading(false);
       },
     });
   }, []);
 
-  const ongoingEvents = upcomingEvents.filter((item) => {
-    const status = normalizeEventStatus(item.status);
-    return status.includes("ongoing") || status.includes("inprogress");
-  });
+  const ongoingEvents = [
+    featuredOngoingEvent,
+    ...upcomingEvents.filter((item) => {
+      const status = normalizeEventStatus(item.status);
+      return (
+        (status.includes("ongoing") || status.includes("inprogress")) &&
+        item.eventTitle !== featuredOngoingEvent.eventTitle
+      );
+    }),
+  ];
   const scheduledEvents = upcomingEvents.filter((item) => {
     const status = normalizeEventStatus(item.status);
     return (
@@ -237,12 +265,12 @@ export default function Events() {
       </section>
 
       <section
-        className="w-full bg-surface-container-low py-10 lg:py-14"
+        className="event-teaser-section w-full py-10 lg:py-14"
         aria-labelledby="event-teaser-title"
       >
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 lg:grid-cols-12 lg:px-8">
-          <div className="lg:col-span-4">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
+        <div className="event-teaser-panel mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 rounded-3xl px-5 py-6 sm:px-8 lg:grid-cols-12 lg:px-10 lg:py-10">
+          <div className="teaser-copy lg:col-span-4">
+            <span className="teaser-badge inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider">
               <span
                 className="material-symbols-outlined text-[16px]"
                 aria-hidden="true"
@@ -253,18 +281,19 @@ export default function Events() {
             </span>
             <h2
               id="event-teaser-title"
-              className="mt-3 font-headline text-2xl font-bold text-on-surface lg:text-3xl"
+              className="mt-3 font-headline text-2xl font-bold lg:text-3xl"
             >
               IBM Event Teaser
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-on-surface-variant lg:text-lg">
+            <p className="mt-3 text-base leading-relaxed lg:text-lg">
               Get a preview of Galóng Galínda’s event highlights.
             </p>
           </div>
-          <div className="overflow-hidden rounded-2xl bg-black shadow-lg lg:col-span-8">
+          <div className="event-teaser-video lg:col-span-8">
             <video
               className="aspect-video w-full"
               src="/gallery/ibm-teaser.mp4"
+              poster="/gallery/ibm-event-teaser-poster.png"
               controls
               preload="metadata"
               playsInline
@@ -335,23 +364,26 @@ export default function Events() {
               ).map((item, index) => (
                 <article
                   key={item.eventTitle || index}
-                  className={`flex flex-col overflow-hidden rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest shadow-sm transition-all hover:shadow-md ${item.image ? "md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-12" : ""}`}
+                  className={`flex flex-col overflow-hidden rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest shadow-sm transition-all hover:shadow-md ${item.image ? "md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-12" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-card" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-card" : ""}`}
                 >
                   {item.image && (
-                    <div className="flex h-96 items-center justify-center overflow-hidden bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]">
+                    <div className={`flex items-center justify-center overflow-hidden ${item.eventId === "bped-web-fusion" ? "bped-event-poster md:col-span-2 lg:col-span-5" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-poster md:col-span-2 lg:col-span-5" : "h-96 bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]"}`}>
                       <img
                         src={item.image}
-                        alt="IBM Days 2026: MANAWARI event poster"
-                        className="h-full w-full object-contain"
+                        alt={`${item.eventTitle} event poster`}
+                        loading={item.eventId === "bped-web-fusion" || item.eventId === "ibm-days-manawari-2026" ? "eager" : "lazy"}
+                        decoding="async"
+                        fetchPriority={item.eventId === "bped-web-fusion" || item.eventId === "ibm-days-manawari-2026" ? "high" : "auto"}
+                        className={`h-full w-full ${item.eventId === "bped-web-fusion" ? "object-cover" : "object-contain"}`}
                       />
                     </div>
                   )}
                   <div
-                    className={`flex flex-1 flex-col gap-5 p-6 ${item.image ? "featured-event-panel lg:col-span-7 lg:justify-center lg:p-8" : ""}`}
+                    className={`flex flex-1 flex-col gap-5 p-6 ${item.image ? "featured-event-panel lg:col-span-7 lg:justify-center lg:p-8" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-details" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-details" : ""}`}
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="rounded-full bg-secondary/10 px-3 py-1 font-label-badge text-[10px] font-bold uppercase text-secondary">
+                        <span className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}>
                           {item.status || "Upcoming"}
                         </span>
                         <span className="flex items-center gap-1 font-label text-xs text-on-surface-variant">

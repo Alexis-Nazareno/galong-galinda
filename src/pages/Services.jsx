@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
+import { trackNetworkActivity } from "../utils/networkActivity";
 
 export default function Services() {
   const [dynamicServices, setDynamicServices] = useState([]);
@@ -9,11 +10,13 @@ export default function Services() {
     const sheetCsvUrl =
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vSowJhCiO6-TjuZRK0Iho_eaLfsZBey_2lrFYMCuf88hc91ogE6_K7jv9QurxlVkHonQAu2dT9bUsEQ/pub?gid=1327649785&single=true&output=csv";
 
+    const finishServicesRequest = trackNetworkActivity();
     Papa.parse(sheetCsvUrl, {
       download: true,
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        finishServicesRequest();
         // Filter out any rows without a title
         const validRows = results.data.filter(
           (row) => row.title && row.imageMain,
@@ -22,6 +25,7 @@ export default function Services() {
         setIsLoading(false);
       },
       error: (error) => {
+        finishServicesRequest();
         console.error("Error fetching services spreadsheet data:", error);
         setIsLoading(false);
       },
@@ -136,7 +140,7 @@ export default function Services() {
                 <div className="relative rounded-2xl overflow-hidden shadow-md sm:col-span-2 h-64 bg-surface-container">
                   <img
                     alt="Student team at a school sports festival"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover object-[center_62%]"
                     src="/gallery/volleyball-officiating-session.jpeg"
                   />
                 </div>

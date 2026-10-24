@@ -57,11 +57,7 @@ export default function ProductImageCarousel({ images, label }) {
           />
         ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/70 to-transparent px-3 pb-3 pt-8">
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white drop-shadow">
-          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">swipe</span>
-          Auto-sliding · swipe to explore
-        </span>
+      <div className="absolute inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8">
         <div className="flex items-center gap-1" role="group" aria-label={`${label} photo slides`}>
           {images.map((image, index) => (
             <button
