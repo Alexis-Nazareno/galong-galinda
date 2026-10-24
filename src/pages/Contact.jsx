@@ -109,7 +109,7 @@ export default function Contact() {
                     href="https://www.facebook.com/share/1C6jJJMqRT/?mibextid=wwXIfr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-label text-sm font-bold text-on-primary transition-colors hover:bg-primary-container"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-label text-sm font-bold text-on-primary transition-colors hover:bg-primary-container hover:text-on-primary-container"
                     aria-label="Follow Galóng Galínda on Facebook"
                   >
                     <span className="material-symbols-outlined" aria-hidden="true">thumb_up</span>
@@ -241,7 +241,7 @@ export default function Contact() {
                       <textarea name="message" className="w-full px-4 py-3 rounded-lg bg-surface-container-lowest text-on-surface border border-surface-container-high focus:border-primary focus:ring-1 focus:ring-primary text-body sm:text-sm outline-none transition-shadow resize-y min-h-[100px]" placeholder="Specify tournament dates, number of courts, or quantity of products needed..." rows="3"></textarea>
                     </div>
                     
-                    <button className="w-full mt-2 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label text-sm font-bold uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-70" type="submit" disabled={isSubmitting}>
+                    <button className="w-full mt-2 py-3.5 rounded-lg bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label text-sm font-bold uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-70" type="submit" disabled={isSubmitting}>
                       <span>{isSubmitting ? 'Sending...' : 'Send Request'}</span>
                       <span className="material-symbols-outlined text-[18px]">send</span>
                     </button>

@@ -1,13 +1,26 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LikeButton from "../components/LikeButton";
+import ZoomableImage from "../components/ZoomableImage";
+import useConfetti from "../components/useConfetti";
 
 function EventHighlightCard({ highlight, isExpanded, onToggle }) {
+  const sceneRef = useRef(null);
   const frontRef = useRef(null);
   const backRef = useRef(null);
+  const hasMountedRef = useRef(false);
+  const { fireConfetti, confettiLayer } = useConfetti();
   const [cardHeight, setCardHeight] = useState(0);
   const detailsId = `highlight-details-${highlight.id}`;
   const activeFaceRef = isExpanded ? backRef : frontRef;
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    if (isExpanded) fireConfetti(sceneRef.current);
+  }, [isExpanded, fireConfetti]);
 
   useLayoutEffect(() => {
     const face = activeFaceRef.current;
@@ -23,6 +36,7 @@ function EventHighlightCard({ highlight, isExpanded, onToggle }) {
 
   return (
     <article
+      ref={sceneRef}
       className="highlight-card-scene"
       style={{ height: cardHeight ? `${cardHeight}px` : undefined }}
     >
@@ -134,17 +148,13 @@ function EventHighlightCard({ highlight, isExpanded, onToggle }) {
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
               {highlight.photos.slice(0, 4).map((photo, index) => (
-                <div
+                <ZoomableImage
                   key={`${photo.src}-${index}`}
-                  className="group overflow-hidden rounded-lg bg-surface-container"
-                >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="h-28 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-36"
-                    loading="lazy"
-                  />
-                </div>
+                  src={photo.src}
+                  alt={photo.alt}
+                  wrapperClassName="w-full rounded-lg bg-surface-container"
+                  className="h-28 w-full object-cover sm:h-36"
+                />
               ))}
             </div>
             <Link
@@ -163,6 +173,7 @@ function EventHighlightCard({ highlight, isExpanded, onToggle }) {
           </div>
         </div>
       </div>
+      {confettiLayer}
     </article>
   );
 }
@@ -207,7 +218,7 @@ export default function Home() {
           alt: "PE Days team posing together after their performance",
         },
       ],
-      link: "/events#section-upcoming",
+      link: "/events?tab=previous&category=PE%20Days#gallery-event-pe-days",
       action: "Explore events",
     },
     {
@@ -234,8 +245,8 @@ export default function Home() {
           alt: "An instructor demonstrating sports officiating on court",
         },
       ],
-      link: "/services#officiating",
-      action: "View services",
+      link: "/events?tab=previous&category=Sports%20Officiating#gallery-event-stedar-sepak-takraw-officiating",
+      action: "Explore events",
     },
     {
       id: "volleyball-workshop",
@@ -261,7 +272,7 @@ export default function Home() {
           alt: "Volleyball officiating seminar participants with the Art of the Call display",
         },
       ],
-      link: "/events#section-upcoming",
+      link: "/events?tab=previous&category=Seminars%20%26%20Workshops#gallery-event-seminars-and-officiating",
       action: "Learn more",
     },
   ];
@@ -340,7 +351,7 @@ export default function Home() {
                 <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
                   <Link
                     to="/events#section-upcoming"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_14px_rgba(178,1,18,0.28)] hover:-translate-y-0.5"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_14px_rgba(178,1,18,0.28)] hover:-translate-y-0.5"
                   >
                     <span className="material-symbols-outlined text-[18px]">
                       calendar_month
@@ -951,7 +962,7 @@ export default function Home() {
                 </p>
                 <button
                   type="submit"
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-bold text-on-primary shadow-sm transition-colors hover:bg-primary-container focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-bold text-on-primary shadow-sm transition-colors hover:bg-primary-container hover:text-on-primary-container focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   <span
                     className="material-symbols-outlined text-lg"

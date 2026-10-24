@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Papa from "papaparse";
 import { trackNetworkActivity } from "../utils/networkActivity";
 import LikeButton from "../components/LikeButton";
+import PosterSparkleImage from "../components/PosterSparkleImage";
+import ZoomableImage from "../components/ZoomableImage";
+import useConfetti from "../components/useConfetti";
 
 const normalizeEventStatus = (status = "") =>
   status
@@ -14,7 +18,7 @@ const formatEventCategory = (category = "") => {
     .toLowerCase()
     .replace(/[\s_-]/g, "");
   if (normalized === "pedays") return "PE Days";
-  if (normalized === "officiating") return "Officiating";
+  if (normalized === "officiating") return "Sports Officiating";
   if (normalized === "seminarworkshops") return "Seminars & Workshops";
   return category
     .replace(/[_-]/g, " ")
@@ -29,7 +33,7 @@ const featuredUpcomingEvent = {
   eventTime:
     "8:00 A.M. – 5:00 P.M. (Suggested schedule; subject to confirmation)",
   venue: "City College of Angeles",
-  image: "/gallery/ibm-days-manawari-optimized.jpg",
+  image: "/gallery/IBM-final.jpg",
   description:
     "Get ready for IBM Days 2026: MANAWARI, happening on October 28–30, 2026, at the City College of Angeles! This three-day celebration organized by the Institute of Business and Management brings students together for an exciting experience filled with engaging activities, talent showcases, entertainment, and opportunities to learn and connect. Featuring special performances from Cup of Joe, Adie, and The Band Summers, the event celebrates student creativity, unity, and school spirit. Join us as we make unforgettable memories, discover talents, strengthen friendships, and celebrate the vibrant community of IBM!",
 };
@@ -48,8 +52,32 @@ const featuredOngoingEvent = {
 
 const featuredGalleryEvents = [
   {
+    eventId: "stedar-sepak-takraw-officiating",
+    eventTitle: "Sports Officiating ",
+    eventDesc:
+      "Taking part in sports activities that encourage teamwork, discipline, and sportsmanship while learning the importance of fair play and responsibility.",
+    // eventDate: "January 29–30, 2026",
+    // eventVenue: "Villa Dolores Subdivision, Sto. Domingo, Angeles City",
+    category: "Sports Officiating",
+    photos: [
+      {
+        imgSrc: "/gallery/sports-festival-teamwork.jpeg",
+        photoTitle: "Sepak Takraw Officiating",
+        photoDesc:
+          "Sports officials help ensure the Sepak Takraw game is conducted fairly and according to the rules.",
+      },
+      {
+        imgSrc: "/gallery/so%20(5).jpg",
+        photoTitle: "Sport Officiating",
+        photoDesc:
+          "Participants practice sports officiating skills during a hands-on training session.",
+      },
+    ],
+    videos: [],
+  },
+  {
     eventId: "seminars-and-officiating",
-    eventTitle: "Seminar Workshops and Sports Officiating",
+    eventTitle: "Seminar Workshops",
     eventDesc:
       "Practical learning experiences that build participants’ confidence and skills through technical training, demonstrations, and officiating practice.",
     category: "Seminars & Workshops",
@@ -66,23 +94,48 @@ const featuredGalleryEvents = [
         photoDesc:
           "Facilitators share interactive learning activities and officiating demonstrations.",
       },
-      {
-        imgSrc: "/gallery/so%20(5).jpg",
-        photoTitle: "Sports Officiating",
-        photoDesc:
-          "Participants take part in practical sports officiating discussions.",
-      },
     ],
     videos: [],
   },
 ];
 
+const photoFullDescriptions = {
+  "Sepak Takraw Officiating":
+    "Sports officials help ensure the Sepak Takraw game is conducted fairly and according to the rules. They monitor serves, rallies, and scoring, make quick and impartial decisions, and keep the match safe and orderly while modeling sportsmanship, teamwork, and respect for every player on the court.",
+  "Sport Officiating":
+    "Participants practice sports officiating skills during a hands-on training session. They learn proper positioning, hand signals, rule interpretation, and communication with players and fellow officials, building the confidence and discipline needed to manage real game situations fairly.",
+  "Referee Delegation":
+    "Participants develop officiating skills through technical training and demonstrations. The delegation of referees learns game mechanics, teamwork among officials, and proper conduct, preparing them to handle competitions with fairness, accuracy, and professionalism.",
+  "Seminar-Workshops":
+    "Facilitators share interactive learning activities and officiating demonstrations. Participants take part in guided discussions, practical drills, and feedback sessions that strengthen their understanding of the rules and their ability to apply them in actual games.",
+  "Volleyball Seminar Workshops":
+    "Participants and organizers gather during a volleyball officiating seminar workshop. The session covers rules, signals, court positioning, and scoring procedures, with hands-on practice so attendees can officiate volleyball matches with confidence.",
+  "PE Days Zumba Competition":
+    "Participants perform a coordinated Zumba routine as part of the PE Days competition. Teams showcase rhythm, energy, and creativity while promoting fitness, camaraderie, and school spirit throughout the celebration of movement and teamwork.",
+};
+
 export default function Events() {
-  const [activeEventTab, setActiveEventTab] = useState("upcoming");
-  const [activeGalleryCategory, setActiveGalleryCategory] = useState("all");
+  const location = useLocation();
+  const [activeEventTab, setActiveEventTab] = useState(() => {
+    const requestedTab = new URLSearchParams(location.search).get("tab");
+    return ["upcoming", "ongoing", "previous"].includes(requestedTab)
+      ? requestedTab
+      : "upcoming";
+  });
+  const [activeGalleryCategory, setActiveGalleryCategory] = useState(
+    () => new URLSearchParams(location.search).get("category") || "all",
+  );
+  const [flippedPhotoCardId, setFlippedPhotoCardId] = useState(null);
+  const { fireConfetti, confettiLayer } = useConfetti();
   const [galleryEvents, setGalleryEvents] = useState(featuredGalleryEvents);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isUpcomingLoading, setIsUpcomingLoading] = useState(true);
+  const [isGalleryLoading, setIsGalleryLoading] = useState(true);
+
+  const togglePhotoCard = (cardId, cardElement) => {
+    if (flippedPhotoCardId !== cardId) fireConfetti(cardElement);
+    setFlippedPhotoCardId((currentId) => (currentId === cardId ? null : cardId));
+  };
 
   useEffect(() => {
     // 1. PASTE YOUR PUBLISHED "UPCOMING" TAB CSV LINK HERE:
@@ -105,10 +158,12 @@ export default function Events() {
           (item) => item.eventTitle && item.eventDate,
         );
         setUpcomingEvents(validUpcoming);
+        setIsUpcomingLoading(false);
       },
       error: (err) => {
         finishUpcomingRequest();
         console.error("Error fetching upcoming events:", err);
+        setIsUpcomingLoading(false);
       },
     });
 
@@ -173,19 +228,22 @@ export default function Events() {
         setGalleryEvents([
           ...featuredGalleryEvents.map((event) =>
             event.eventId === "seminars-and-officiating"
-              ? { ...event, photos: [...event.photos, ...seminarWorkshopPhotos] }
+              ? {
+                  ...event,
+                  photos: [...event.photos, ...seminarWorkshopPhotos],
+                }
               : event,
           ),
           ...sheetEvents.filter(
             (event) => !featuredEventIds.has(event.eventId),
           ),
         ]);
-        setIsLoading(false);
+        setIsGalleryLoading(false);
       },
       error: (error) => {
         finishGalleryRequest();
         console.error("Error fetching events spreadsheet data:", error);
-        setIsLoading(false);
+        setIsGalleryLoading(false);
       },
     });
   }, []);
@@ -307,7 +365,7 @@ export default function Events() {
 
       {/* SECTION: EVENT CALENDAR */}
       <section
-        className="w-full py-12 lg:py-16 bg-surface-container-low border-b border-surface-container-high/60"
+        className="w-full py-12 lg:py-16 bg-surface-container-low border-b border-surface-container-high/60 scroll-mt-20"
         id="section-upcoming"
       >
         <div className="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col gap-8">
@@ -358,24 +416,76 @@ export default function Events() {
               key={activeEventTab}
               className="tab-transition-enter grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
-              {(activeEventTab === "upcoming"
-                ? visibleScheduledEvents
-                : visibleSchedule
-              ).map((item, index) => (
+              {isUpcomingLoading ? (
+                <div
+                  className="col-span-full rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Loading events...
+                </div>
+              ) : (
+                <>
+                  {(activeEventTab === "upcoming"
+                    ? visibleScheduledEvents
+                    : visibleSchedule
+                  ).map((item, index) => (
                 <article
                   key={item.eventTitle || index}
                   className={`flex flex-col overflow-hidden rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest shadow-sm transition-all hover:shadow-md ${item.image ? "md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-12" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-card" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-card" : ""}`}
                 >
                   {item.image && (
-                    <div className={`flex items-center justify-center overflow-hidden ${item.eventId === "bped-web-fusion" ? "bped-event-poster md:col-span-2 lg:col-span-5" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-poster md:col-span-2 lg:col-span-5" : "h-96 bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]"}`}>
-                      <img
+                    <div
+                      className={`flex items-center justify-center overflow-hidden ${item.eventId === "bped-web-fusion" ? "bped-event-poster md:col-span-2 lg:col-span-5" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-poster md:col-span-2 lg:col-span-5" : "h-96 bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]"}`}
+                    >
+                      {item.eventId === "ibm-days-manawari-2026" ? (
+                        <ZoomableImage
+                          src={item.image}
+                          alt={`${item.eventTitle} event poster`}
+                          wrapperClassName="ember-glow-poster block h-[calc(100%-1.5rem)] w-auto rounded-md"
+                          className="!p-0 h-full w-auto max-w-full object-contain"
+                        />
+                      ) : item.eventId === "bped-web-fusion" ? (
+                        <ZoomableImage
+                          src={item.image}
+                          alt={`${item.eventTitle} event poster`}
+                          wrapperClassName="ember-glow-poster block h-full w-full"
+                          className="h-full w-full object-cover"
+                        >
+                          <span className="fire-drip-field" aria-hidden="true">
+                            {[8, 19, 31, 44, 56, 68, 80, 91].map((left, i) => (
+                              <span
+                                key={left}
+                                className="fire-drip"
+                                style={{
+                                  left: `${left}%`,
+                                  animationDelay: `${(i * 430) % 2600}ms`,
+                                  animationDuration: `${2200 + (i % 3) * 400}ms`,
+                                }}
+                              />
+                            ))}
+                          </span>
+                        </ZoomableImage>
+                      ) : (
+                      <PosterSparkleImage
                         src={item.image}
                         alt={`${item.eventTitle} event poster`}
-                        loading={item.eventId === "bped-web-fusion" || item.eventId === "ibm-days-manawari-2026" ? "eager" : "lazy"}
+                        loading={
+                          item.eventId === "bped-web-fusion" ||
+                          item.eventId === "ibm-days-manawari-2026"
+                            ? "eager"
+                            : "lazy"
+                        }
                         decoding="async"
-                        fetchPriority={item.eventId === "bped-web-fusion" || item.eventId === "ibm-days-manawari-2026" ? "high" : "auto"}
+                        fetchPriority={
+                          item.eventId === "bped-web-fusion" ||
+                          item.eventId === "ibm-days-manawari-2026"
+                            ? "high"
+                            : "auto"
+                        }
                         className={`h-full w-full ${item.eventId === "bped-web-fusion" ? "object-cover" : "object-contain"}`}
                       />
+                      )}
                     </div>
                   )}
                   <div
@@ -383,7 +493,9 @@ export default function Events() {
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}>
+                        <span
+                          className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}
+                        >
                           {item.status || "Upcoming"}
                         </span>
                         <span className="flex items-center gap-1 font-label text-xs text-on-surface-variant">
@@ -434,7 +546,7 @@ export default function Events() {
                           href={item.ctaLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-center font-label-md text-white shadow-sm transition-colors hover:bg-primary-container"
+                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-center font-label-md text-white shadow-sm transition-colors hover:bg-primary-container hover:text-on-primary-container"
                         >
                           <span>View Details</span>
                           <span
@@ -448,63 +560,84 @@ export default function Events() {
                     </div>
                   </div>
                 </article>
-              ))}
+                  ))}
 
-              {activeEventTab === "upcoming" &&
-                visibleScheduledEvents.length === 0 &&
-                !isLoading && (
-                  <div className="col-span-full py-12 text-center text-on-surface-variant font-body-sm bg-surface-container-lowest rounded-2xl border border-surface-container-high/60">
-                    No upcoming events scheduled at the moment. Please check
-                    back soon!
-                  </div>
-                )}
-              {activeEventTab === "ongoing" &&
-                visibleSchedule.length === 0 &&
-                !isLoading && (
-                  <div className="col-span-full py-12 text-center text-on-surface-variant font-body-sm bg-surface-container-lowest rounded-2xl border border-surface-container-high/60">
-                    There are no ongoing events listed at the moment.
-                  </div>
-                )}
+                  {activeEventTab === "upcoming" &&
+                    visibleScheduledEvents.length === 0 && (
+                      <div className="col-span-full rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant">
+                        No upcoming events scheduled at the moment. Please
+                        check back soon!
+                      </div>
+                    )}
+                  {activeEventTab === "ongoing" &&
+                    visibleSchedule.length === 0 && (
+                      <div className="col-span-full rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant">
+                        There are no ongoing events listed at the moment.
+                      </div>
+                    )}
+                </>
+              )}
             </div>
           ) : (
             <div
               key={activeGalleryCategory}
               className="tab-transition-enter flex flex-col gap-8"
             >
-              <div
-                className="flex flex-wrap gap-2"
-                role="group"
-                aria-label="Filter previous events by category"
-              >
-                {galleryCategories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    aria-pressed={activeGalleryCategory === category}
-                    onClick={() => setActiveGalleryCategory(category)}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${activeGalleryCategory === category ? "bg-secondary text-on-secondary" : "bg-surface-container-lowest text-on-surface-variant hover:text-secondary"}`}
-                  >
-                    {category === "all" ? "All Categories" : category}
-                  </button>
-                ))}
-              </div>
-
-              {galleryEvents.length === 0 && !isLoading && (
-                <div className="py-12 text-center text-on-surface-variant font-body-sm bg-surface-container-lowest rounded-2xl border border-surface-container-high/60">
-                  No previous events have been added yet.
-                </div>
-              )}
-              {visibleGalleryEvents.length === 0 &&
-                galleryEvents.length > 0 && (
-                  <div className="py-12 text-center text-on-surface-variant font-body-sm bg-surface-container-lowest rounded-2xl border border-surface-container-high/60">
-                    No previous events in this category yet.
-                  </div>
-                )}
-              {visibleGalleryEvents.map((event) => (
-                <article
-                  key={event.eventId}
-                  className="rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest p-5 shadow-sm sm:p-6"
+              {isGalleryLoading ? (
+                <div
+                  className="rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant"
+                  role="status"
+                  aria-live="polite"
                 >
+                  Loading previous events...
+                </div>
+              ) : (
+                <>
+                  <div
+                    className="flex flex-wrap gap-2"
+                    role="group"
+                    aria-label="Filter previous events by category"
+                  >
+                    {galleryCategories.map((category) => (
+                      <button
+                        key={category}
+                        type="button"
+                        aria-pressed={activeGalleryCategory === category}
+                        onClick={() => setActiveGalleryCategory(category)}
+                        className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${activeGalleryCategory === category ? "bg-secondary text-on-secondary" : "bg-surface-container-lowest text-on-surface-variant hover:text-secondary"}`}
+                      >
+                        {category === "all" ? "All Categories" : category}
+                      </button>
+                    ))}
+                  </div>
+
+                  {galleryEvents.length === 0 && (
+                    <div className="rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant">
+                      No previous events have been added yet.
+                    </div>
+                  )}
+                  {visibleGalleryEvents.length === 0 &&
+                    galleryEvents.length > 0 && (
+                      <div className="rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant">
+                        No previous events in this category yet.
+                      </div>
+                    )}
+                  {visibleGalleryEvents.map((event) => (
+                    <article
+                      key={event.eventId}
+                      id={
+                        event.eventId === "seminars-and-officiating"
+                          ? "gallery-event-seminars-and-officiating"
+                          : event.category === "PE Days" &&
+                              visibleGalleryEvents.find(
+                                (galleryEvent) =>
+                                  galleryEvent.category === "PE Days",
+                              )?.eventId === event.eventId
+                            ? "gallery-event-pe-days"
+                            : `gallery-event-${event.eventId}`
+                      }
+                      className="scroll-mt-32 rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest p-5 shadow-sm sm:p-6"
+                    >
                   <div className="mb-5">
                     <span className="mb-2 inline-flex rounded-full bg-secondary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary">
                       {event.category}
@@ -563,46 +696,95 @@ export default function Events() {
                       </h4>
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {event.photos.map((photo, index) => (
-                          <article
+                          <div
                             key={`${event.eventId}-photo-${index}`}
-                            className="flex flex-col overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest"
+                            className="event-photo-card-scene"
+                            role="button"
+                            tabIndex={0}
+                            aria-pressed={
+                              flippedPhotoCardId ===
+                              `${event.eventId}-photo-${index}`
+                            }
+                            aria-label={`Toggle details for ${photo.photoTitle || event.eventTitle}`}
+                            onClick={(eventTrigger) =>
+                              togglePhotoCard(
+                                `${event.eventId}-photo-${index}`,
+                                eventTrigger.currentTarget,
+                              )
+                            }
+                            onKeyDown={(eventTrigger) => {
+                              if (
+                                eventTrigger.key === "Enter" ||
+                                eventTrigger.key === " "
+                              ) {
+                                eventTrigger.preventDefault();
+                                togglePhotoCard(
+                                  `${event.eventId}-photo-${index}`,
+                                  eventTrigger.currentTarget,
+                                );
+                              }
+                            }}
                           >
-                            <div className="relative h-48 overflow-hidden bg-surface-container">
-                              <img
-                                alt={photo.photoTitle || event.eventTitle}
-                                className="h-full w-full object-cover"
-                                src={photo.imgSrc}
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="flex flex-1 flex-col gap-4 p-4">
-                              {photo.photoTitle && (
-                                <h4 className="font-label-lg font-bold text-on-surface">
-                                  {photo.photoTitle}
-                                </h4>
-                              )}
-                              {(photo.eventDate ||
-                                photo.date ||
-                                event.eventDate) && (
-                                <p className="mt-1 text-xs text-on-surface-variant">
-                                  {photo.eventDate ||
-                                    photo.date ||
-                                    event.eventDate}
-                                </p>
-                              )}
-                              {photo.photoDesc && (
-                                <p className="mt-2 font-body-sm text-sm text-on-surface-variant leading-relaxed">
-                                  {photo.photoDesc}
-                                </p>
-                              )}
-                              <LikeButton
-                                label={`Like photo: ${photo.photoTitle || event.eventTitle}`}
-                                icon="favorite"
-                                storageKey={`event-photo-${event.eventId}-${index}`}
-                                className="mt-auto self-start"
-                              />
-                            </div>
-                          </article>
+                            <article
+                              className={`event-photo-card-flipper ${flippedPhotoCardId === `${event.eventId}-photo-${index}` ? "is-flipped" : ""}`}
+                            >
+                              <div className="event-photo-card-face event-photo-card-front overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest">
+                                <ZoomableImage
+                                  alt={photo.photoTitle || event.eventTitle}
+                                  wrapperClassName="h-48 w-full bg-surface-container"
+                                  className="h-full w-full object-cover"
+                                  src={photo.imgSrc}
+                                />
+                                <div className="flex flex-1 flex-col gap-4 p-4">
+                                  {photo.photoTitle && (
+                                    <h4 className="font-label-lg font-bold text-on-surface">
+                                      {photo.photoTitle}
+                                    </h4>
+                                  )}
+                                  {(photo.eventDate || photo.date) && (
+                                    <p className="mt-1 text-xs text-on-surface-variant">
+                                      {photo.eventDate || photo.date}
+                                    </p>
+                                  )}
+                                  {photo.photoDesc && (
+                                    <p className="event-photo-front-desc mt-2 font-body-sm text-sm leading-relaxed text-on-surface-variant">
+                                      {photo.photoDesc}
+                                    </p>
+                                  )}
+                                  <div
+                                    className="mt-auto self-start"
+                                    onClick={(eventTrigger) =>
+                                      eventTrigger.stopPropagation()
+                                    }
+                                    onKeyDown={(eventTrigger) =>
+                                      eventTrigger.stopPropagation()
+                                    }
+                                  >
+                                    <LikeButton
+                                      label={`Like photo: ${photo.photoTitle || event.eventTitle}`}
+                                      icon="favorite"
+                                      storageKey={`event-photo-${event.eventId}-${index}`}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="event-photo-card-face event-photo-card-back rounded-xl border border-primary/25 bg-surface-container-low p-4">
+                                <div className="flex h-full flex-col gap-3 overflow-y-auto">
+                                  <h4 className="font-label-lg font-bold text-on-surface">
+                                    {photo.photoTitle || event.eventTitle}
+                                  </h4>
+                                  <p className="font-body-sm text-sm leading-relaxed text-on-surface-variant">
+                                    {photo.photoFullDesc ||
+                                      photo.fullDescription ||
+                                      photo.photoDescription ||
+                                      photoFullDescriptions[photo.photoTitle] ||
+                                      photo.photoDesc ||
+                                      event.eventDesc}
+                                  </p>
+                                </div>
+                              </div>
+                            </article>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -687,11 +869,14 @@ export default function Events() {
                     </div>
                   )}
                 </article>
-              ))}
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>
       </section>
+      {confettiLayer}
     </main>
   );
 }
