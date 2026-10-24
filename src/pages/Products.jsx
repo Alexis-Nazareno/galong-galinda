@@ -63,12 +63,11 @@ export default function Products() {
                   <span className="mb-3 inline-flex items-center rounded-full bg-tertiary/10 px-3 py-1 font-label-badge text-label-badge font-bold uppercase tracking-wider text-tertiary">
                     Athletic Nutrition
                   </span>
-                  <h2 className="font-headline-lg text-headline-md font-bold text-on-surface lg:text-headline-lg">Nutrifit Crackers</h2>
+                  <h2 className="font-headline-lg text-headline-md font-bold text-on-surface lg:text-headline-lg">NutriFit Crackers</h2>
                 </div>
                 <p className="font-body-lg leading-relaxed text-on-surface-variant">
-                  Nutrifit Crackers are a convenient, portable snack for students and athletes. The packaging identifies them as whole-grain crackers.
+                  Take a break and take a bite! Whole grain goodness feels so right. Simple snack with tasty delight—fuel your day with every crunch in sight!
                 </p>
-                <p className="font-body-md text-on-surface-variant">Swipe through the product photos or watch the promotional reel.</p>
               </div>
             </article>
 
@@ -81,9 +80,8 @@ export default function Products() {
                   <h2 className="font-headline-lg text-headline-md font-bold text-on-surface lg:text-headline-lg">ArmFeet Powder</h2>
                 </div>
                 <p className="font-body-lg leading-relaxed text-on-surface-variant">
-                  ArmFeet is a 2-in-1 deodorant powder for underarm and foot use. The 40 g product is made for everyday personal care and active routines.
+                  Stay fresh and energized all day! With ArmFeet 2-in-1 Underarm &amp; Foot Deodorant Powder, you can stay confident whether you’re on the go, at school, or playing your favorite sports. No more worries about sweat and odor—just long-lasting freshness and comfort!
                 </p>
-                <p className="font-body-md text-on-surface-variant">Swipe through the product photos or watch the promotional reel.</p>
               </div>
               <div className="grid grid-cols-1 gap-space-sm sm:grid-cols-2 lg:col-span-7">
                 <ProductImageCarousel

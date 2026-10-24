@@ -48,9 +48,9 @@ export default function BackgroundMusic() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
+    <div className="music-control-container">
       {playbackError && (
-        <p className="rounded-lg bg-surface-container-lowest px-3 py-2 text-xs text-error shadow-lg" role="alert">
+        <p className="absolute bottom-full right-0 mb-3 w-max max-w-[min(20rem,calc(100vw-2.5rem))] rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-xs text-error shadow-lg" role="alert">
           {playbackError}
         </p>
       )}

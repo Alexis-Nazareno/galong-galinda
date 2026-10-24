@@ -3,6 +3,7 @@ import { useState } from 'react';
 export default function About() {
   const [activePillar, setActivePillar] = useState(null);
   const [activeMember, setActiveMember] = useState(null);
+  const showTeamSection = false;
 
   // Team data grouped by department for the new split-role design
   const teamGroups = [
@@ -236,7 +237,52 @@ export default function About() {
         </section>
         
 
+        <section id="organizational-video" className="organization-video-section scroll-mt-32 relative isolate overflow-hidden py-16 sm:py-20 lg:py-24">
+          <div className="organization-video-orb organization-video-orb-red" aria-hidden="true" />
+          <div className="organization-video-orb organization-video-orb-blue" aria-hidden="true" />
+          <div className="organization-video-edge-glow organization-video-edge-glow-left hidden sm:block" aria-hidden="true" />
+          <div className="organization-video-edge-glow organization-video-edge-glow-right hidden sm:block" aria-hidden="true" />
+          <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-margin-mobile text-center lg:px-margin">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-label-badge text-label-badge font-bold uppercase tracking-[0.16em] text-white shadow-lg backdrop-blur">
+              <span className="material-symbols-outlined text-base text-[#ffb4ab]" aria-hidden="true">movie</span>
+              Our story, in motion
+            </span>
+            <h2 className="mt-6 max-w-3xl font-headline-lg text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+              Meet the team
+              <span className="mt-1 block bg-gradient-to-r from-[#ffb4ab] via-white to-[#b3c5ff] bg-clip-text text-transparent">
+                behind the movement.
+              </span>
+            </h2>
+            <p className="mt-4 max-w-2xl font-body-lg leading-relaxed text-white/80">
+              Get a glimpse of the people, teamwork, and passion that bring Galóng Galínda to life.
+            </p>
+            <div className="organization-video-frame mt-8 w-full max-w-4xl rounded-2xl p-1 sm:mt-10 sm:rounded-3xl sm:p-2">
+              <video
+                className="aspect-video w-full rounded-xl bg-black object-contain sm:rounded-2xl"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/gallery/organizational-video-poster.png"
+                aria-label="Galóng Galínda organizational video"
+              >
+                <source src="/videos/galong-galinda-organization.mp4" type="video/mp4" />
+                <p className="p-6 text-center text-sm text-white">
+                  Your browser cannot play this video format.
+                  <a className="ml-1 underline" href="/videos/galong-galinda-organization.mp4" download>
+                    Download the organizational video
+                  </a>.
+                </p>
+              </video>
+            </div>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white/80">
+              <span className="material-symbols-outlined text-lg text-[#ffb4ab]" aria-hidden="true">play_circle</span>
+              A closer look at the Galóng Galínda community
+            </div>
+          </div>
+        </section>
+
         {/* SECTION 4: OUR TEAM (REDESIGNED FOR ROLES & MOBILE 2-COLUMN) */}
+        {showTeamSection && (
         <section className="w-full py-space-xl bg-background">
           <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin flex flex-col gap-space-lg">
             
@@ -312,6 +358,7 @@ export default function About() {
 
           </div>
         </section>
+        )}
 
         {/* SECTION 5: CLOSING ANTHEM */}
         <section className="w-full py-space-xl bg-surface-container-low border-y border-surface-container-high/60">

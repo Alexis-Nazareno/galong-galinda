@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Footer() {
+  const { pathname } = useLocation();
+
   return (
     <footer className="w-full bg-surface-container-low text-on-surface py-space-xl border-t border-surface-container-high/60">
       <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl">
@@ -69,7 +71,9 @@ export default function Footer() {
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 font-label-md text-[11px] uppercase tracking-wider text-on-surface-variant">
           <Link to="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
           <Link to="/terms" className="hover:text-primary transition-colors">Terms & Conditions</Link>
-          <Link to="/refund" className="hover:text-primary transition-colors">Refund & Return Policy</Link>
+          {pathname === '/products' && (
+            <Link to="/refund" className="hover:text-primary transition-colors">Refund &amp; Return Policy</Link>
+          )}
           <Link to="/cookies" className="hover:text-primary transition-colors">Cookie Information</Link>
         </div>
 

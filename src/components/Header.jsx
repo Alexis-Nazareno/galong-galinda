@@ -62,7 +62,12 @@ export default function Header() {
       <div className="h-20 bg-surface-container-lowest/95 backdrop-blur-md px-margin-mobile lg:px-margin flex items-center justify-between relative">
         
         {/* UPPER LEFT LOGO WITH KINETIC ENERGY */}
-        <Link to="/" className="flex items-center gap-space-md group">
+        <Link
+          to="/"
+          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+          className="flex items-center gap-space-md group"
+          aria-label="Galóng Galínda home and back to top"
+        >
           
           {/* Animated Spinning Icon Container */}
           <div className="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
