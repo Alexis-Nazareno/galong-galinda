@@ -1,10 +1,37 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { trackNetworkActivity } from "../utils/networkActivity";
+import ZoomableImage from "../components/ZoomableImage";
 
+const COVER_GROUPS = [
+  {
+    title: "Sports Officiating",
+    note: "Trained officials for fair, well-run games.",
+    icon: "sports",
+    accent: "secondary",
+    items: [
+      ["Basketball", "sports_basketball", "Certified officials who keep every quarter fair, fast, and safe for the players."],
+      ["Volleyball", "sports_volleyball", "Referees and line judges for school leagues, intramurals, and friendly matches."],
+      ["Swimming", "pool", "Officiating for swim meets, from start signals to stroke and turn judging."],
+      ["Badminton", "sports_tennis", "Umpires and service judges for singles and doubles tournaments."],
+    ],
+  },
+  {
+    title: "Event Organizing",
+    note: "Planning and running school activities end to end.",
+    icon: "celebration",
+    accent: "primary",
+    items: [
+      ["PE Days", "directions_run", "Games, schedules, and logistics for a full day of physical education fun."],
+      ["Culminating Activities", "emoji_events", "Program flow, awarding, and coordination for end-of-term celebrations."],
+      ["School Events", "school", "Support for campus events, from planning and staging to day-of operations."],
+    ],
+  },
+];
 export default function Services() {
   const [dynamicServices, setDynamicServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeCover, setActiveCover] = useState({});
 
   useEffect(() => {
     const sheetCsvUrl =
@@ -53,23 +80,6 @@ export default function Services() {
                   </p>
                 </div>
               </div>
-
-              {/* Highlights Pill Box */}
-              <div className="lg:col-span-4 flex flex-col">
-                <div className="grid grid-cols-1 gap-space-sm p-space-md rounded-xl bg-surface-container-lowest/80 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-surface-container-highest self-stretch shrink-0">
-                  <a
-                    href="#officiating"
-                    className="flex items-center gap-space-sm p-3 rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors group border border-surface-container-high/50"
-                  >
-                    <span className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">
-                      sports
-                    </span>
-                    <span className="font-headline-sm text-[15px] font-bold text-on-surface">
-                      Officiating
-                    </span>
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -94,75 +104,107 @@ export default function Services() {
                   organizing for PE Days, culminating activities, and school
                   events.
                 </p>
-                <div className="flex flex-col gap-4">
-                  <div>
-                    <h3 className="mb-2 font-label-lg text-label-lg font-bold text-on-surface">
-                      Sports Officiating
-                    </h3>
-                    <ul className="flex flex-wrap gap-2">
-                      {[
-                        "Basketball",
-                        "Volleyball",
-                        "Swimming",
-                        "Badminton",
-                      ].map((sport) => (
-                        <li
-                          key={sport}
-                          className="rounded-full bg-secondary/10 px-3 py-1.5 text-sm font-semibold text-secondary"
-                        >
-                          {sport}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="mb-2 font-label-lg text-label-lg font-bold text-on-surface">
-                      Event Organizing
-                    </h3>
-                    <ul className="flex flex-wrap gap-2">
-                      {[
-                        "PE Days",
-                        "Culminating Activities",
-                        "School Events",
-                      ].map((activity) => (
-                        <li
-                          key={activity}
-                          className="rounded-full bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary"
-                        >
-                          {activity}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
               </div>
               <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
-                <div className="relative rounded-2xl overflow-hidden shadow-md sm:col-span-2 h-64 bg-surface-container">
-                  <img
-                    alt="Student team at a school sports festival"
-                    className="h-full w-full object-cover object-[center_62%]"
-                    src="/gallery/volleyball-officiating-session.jpeg"
-                  />
-                </div>
-                <div className="relative rounded-xl overflow-hidden shadow-sm h-40 bg-surface-container">
-                  <img
-                    alt="Volleyball officiating during a school sports event"
-                    className="w-full h-full object-cover"
-                    src="/gallery/basketball-officiating-session.jpeg"
-                  />
-                </div>
-                <div className="relative h-40 overflow-hidden rounded-xl bg-surface-container shadow-sm">
-                  <img
-                    alt="Basketball game in progress at Pampanga People's Gym"
-                    className="h-full w-full object-cover"
-                    src="/gallery/basketball-court-game.jpeg"
-                  />
-                </div>
+                <ZoomableImage
+                  alt="Student team at a school sports festival"
+                  wrapperClassName="rounded-2xl shadow-md sm:col-span-2 h-64 bg-surface-container"
+                  className="h-full w-full object-cover object-[center_62%]"
+                  src="/gallery/volleyball-officiating-session.jpeg"
+                />
+                <ZoomableImage
+                  alt="Volleyball officiating during a school sports event"
+                  wrapperClassName="rounded-xl shadow-sm h-40 bg-surface-container"
+                  className="w-full h-full object-cover"
+                  src="/gallery/basketball-officiating-session.jpeg"
+                />
+                <ZoomableImage
+                  alt="Basketball game in progress at Pampanga People's Gym"
+                  wrapperClassName="h-40 rounded-xl bg-surface-container shadow-sm"
+                  className="h-full w-full object-cover"
+                  src="/gallery/basketball-court-game.jpeg"
+                />
               </div>
             </div>
           </div>
         </section>
 
+        {/* SECTION 3: WHAT WE COVER */}
+        <section className="relative w-full overflow-hidden border-t border-surface-container-high/60 bg-surface-container-low py-space-xl">
+          <div className="mx-auto max-w-7xl px-margin-mobile lg:px-margin">
+            <div className="mb-space-lg max-w-2xl border-l-4 border-primary pl-4">
+              <p className="font-label-badge text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                Our Services
+              </p>
+              <h2 className="mt-1 font-headline-lg text-headline-md font-bold text-on-surface lg:text-headline-lg">
+                What We Cover
+              </h2>
+              <p className="mt-2 text-on-surface-variant">
+                Tap a service to see how Galóng Galínda can help.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 items-stretch gap-space-lg lg:grid-cols-2">
+              {COVER_GROUPS.map((group) => {
+                const isPrimary = group.accent === "primary";
+                const selectedLabel = activeCover[group.title] ?? group.items[0][0];
+                const selected = group.items.find(([label]) => label === selectedLabel);
+                return (
+                  <article
+                    key={group.title}
+                    className={`relative flex flex-col overflow-hidden rounded-2xl border border-surface-container-high border-t-4 bg-surface-container-lowest p-space-lg shadow-sm ${isPrimary ? "border-t-primary" : "border-t-secondary"}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`material-symbols-outlined flex h-14 w-14 items-center justify-center rounded-xl text-[28px] ${isPrimary ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary"}`}
+                      >
+                        {group.icon}
+                      </span>
+                      <div>
+                        <h3 className="font-headline-sm text-xl font-bold text-on-surface">
+                          {group.title}
+                        </h3>
+                        <p className="text-sm text-on-surface-variant">{group.note}</p>
+                      </div>
+                    </div>
+                    <ul className="mb-space-md mt-space-md grid grid-cols-1 gap-3 sm:auto-rows-fr sm:grid-cols-2">
+                      {group.items.map(([label, icon]) => {
+                        const isActive = label === selectedLabel;
+                        return (
+                          <li key={label} className="flex">
+                            <button
+                              type="button"
+                              aria-pressed={isActive}
+                              onClick={() =>
+                                setActiveCover((current) => ({ ...current, [group.title]: label }))
+                              }
+                              className={`cover-tile flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${isActive ? (isPrimary ? "border-primary bg-primary text-on-primary shadow-md" : "border-secondary bg-secondary text-on-secondary shadow-md") : "border-surface-container-high bg-surface-container-low text-on-surface hover:bg-surface-container"}`}
+                            >
+                              <span
+                                className={`material-symbols-outlined cover-tile-icon text-[22px] ${isActive ? "" : isPrimary ? "text-primary" : "text-secondary"}`}
+                              >
+                                {icon}
+                              </span>
+                              {label}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    <div
+                      key={selectedLabel}
+                      className={`cover-detail mt-auto min-h-[7.5rem] rounded-xl border-l-4 p-4 ${isPrimary ? "border-primary bg-primary/5" : "border-secondary bg-secondary/5"}`}
+                    >
+                      <p className="font-bold text-on-surface">{selected[0]}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">
+                        {selected[2]}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
         {/* ADDITIONAL SERVICES FROM GOOGLE SHEETS */}
         {!isLoading && dynamicServices.length > 0 && (
           <section className="w-full py-space-xl bg-surface-container-low border-t border-surface-container-high/60">

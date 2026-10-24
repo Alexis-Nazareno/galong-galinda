@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import ZoomableImage from '../components/ZoomableImage';
+import useConfetti from '../components/useConfetti';
 
 export default function About() {
   const [activePillar, setActivePillar] = useState(null);
+  const { fireConfetti, confettiLayer } = useConfetti();
+  const togglePillar = (index, element) => {
+    if (activePillar !== index) fireConfetti(element);
+    setActivePillar(activePillar === index ? null : index);
+  };
   const [activeMember, setActiveMember] = useState(null);
-  const showTeamSection = false;
+  const showTeamSection = true;
 
   // Team data grouped by department for the new split-role design
   const teamGroups = [
@@ -138,7 +145,7 @@ export default function About() {
             </div>
             
             <div className="grid grid-cols-1 items-start sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
-              <button type="button" aria-expanded={activePillar === 0} onClick={() => setActivePillar(activePillar === 0 ? null : 0)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${activePillar === 0 ? 'border-primary ring-1 ring-primary/20' : 'border-primary/20'}`}>
+              <button type="button" aria-expanded={activePillar === 0} onClick={(event) => togglePillar(0, event.currentTarget)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${activePillar === 0 ? 'border-primary ring-1 ring-primary/20' : 'border-primary/20'}`}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="w-10 h-10 rounded-lg bg-primary-fixed text-primary flex items-center justify-center">
                     <span className="material-symbols-outlined text-[22px]">workspace_premium</span>
@@ -151,7 +158,7 @@ export default function About() {
                 <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-semibold text-primary">{activePillar === 0 ? 'Show less' : 'Explore pillar'}<span className="material-symbols-outlined text-base">{activePillar === 0 ? 'expand_less' : 'expand_more'}</span></span>
               </button>
               
-              <button type="button" aria-expanded={activePillar === 1} onClick={() => setActivePillar(activePillar === 1 ? null : 1)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary ${activePillar === 1 ? 'border-secondary ring-1 ring-secondary/20' : 'border-secondary/20'}`}>
+              <button type="button" aria-expanded={activePillar === 1} onClick={(event) => togglePillar(1, event.currentTarget)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary ${activePillar === 1 ? 'border-secondary ring-1 ring-secondary/20' : 'border-secondary/20'}`}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="w-10 h-10 rounded-lg bg-secondary-fixed text-secondary flex items-center justify-center">
                     <span className="material-symbols-outlined text-[22px]">psychology</span>
@@ -164,7 +171,7 @@ export default function About() {
                 <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-semibold text-secondary">{activePillar === 1 ? 'Show less' : 'Explore pillar'}<span className="material-symbols-outlined text-base">{activePillar === 1 ? 'expand_less' : 'expand_more'}</span></span>
               </button>
               
-              <button type="button" aria-expanded={activePillar === 2} onClick={() => setActivePillar(activePillar === 2 ? null : 2)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-tertiary ${activePillar === 2 ? 'border-tertiary ring-1 ring-tertiary/20' : 'border-tertiary/20'}`}>
+              <button type="button" aria-expanded={activePillar === 2} onClick={(event) => togglePillar(2, event.currentTarget)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-tertiary ${activePillar === 2 ? 'border-tertiary ring-1 ring-tertiary/20' : 'border-tertiary/20'}`}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="w-10 h-10 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center">
                     <span className="material-symbols-outlined text-[22px]">handshake</span>
@@ -177,7 +184,7 @@ export default function About() {
                 <span className="mt-auto inline-flex items-center gap-1 pt-2 text-xs font-semibold text-tertiary">{activePillar === 2 ? 'Show less' : 'Explore pillar'}<span className="material-symbols-outlined text-base">{activePillar === 2 ? 'expand_less' : 'expand_more'}</span></span>
               </button>
               
-               <button type="button" aria-expanded={activePillar === 3} onClick={() => setActivePillar(activePillar === 3 ? null : 3)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${activePillar === 3 ? 'border-primary ring-1 ring-primary/20' : 'border-tertiary/20'}`}>
+               <button type="button" aria-expanded={activePillar === 3} onClick={(event) => togglePillar(3, event.currentTarget)} className={`flex min-h-[14rem] w-full self-start flex-col gap-space-xs rounded-xl border bg-surface-container-lowest p-space-lg text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${activePillar === 3 ? 'border-primary ring-1 ring-primary/20' : 'border-tertiary/20'}`}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="w-10 h-10 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center">
                     <span className="material-symbols-outlined text-[22px]">diversity_3</span>
@@ -216,19 +223,25 @@ export default function About() {
               </div>
               
               <div className="lg:col-span-5 flex flex-col gap-space-sm">
-                <div className="relative w-full h-56 rounded-2xl overflow-hidden shadow-md group">
-                  <img alt="City College of Angeles PE stage committee" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/so%20(7).jpg"  />
-                </div>
+                <ZoomableImage
+                  alt="City College of Angeles PE stage committee"
+                  wrapperClassName="w-full h-56 rounded-2xl shadow-md"
+                  className="w-full h-full object-cover"
+                  src="/gallery/so%20(7).jpg"
+                />
                 <div className="grid grid-cols-2 gap-space-sm">
-                  <div className="relative h-36 rounded-xl overflow-hidden shadow-sm group">
-                    <img alt="Participants taking part in a PE Days group activity" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/pe%20(2).jpg"  />
-                  </div>
-                  <div className="relative h-36 rounded-xl overflow-hidden shadow-sm group">
-                    <img alt="Participants learning sports officiating skills" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="/gallery/officiating.jpg"  />
-                    <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-transparent to-transparent flex items-end p-2">
-                      <span className="text-inverse-on-surface text-[11px] font-label-badge uppercase tracking-wider font-bold"><br /></span>
-                    </div>
-                  </div>
+                  <ZoomableImage
+                    alt="Participants taking part in a PE Days group activity"
+                    wrapperClassName="h-36 rounded-xl shadow-sm"
+                    className="w-full h-full object-cover"
+                    src="/gallery/pe%20(2).jpg"
+                  />
+                  <ZoomableImage
+                    alt="Participants learning sports officiating skills"
+                    wrapperClassName="h-36 rounded-xl shadow-sm"
+                    className="w-full h-full object-cover"
+                    src="/gallery/officiating.jpg"
+                  />
                 </div>
               </div>
 
@@ -314,23 +327,22 @@ export default function About() {
 
                       return (
                         <div key={memberId} className="group w-full self-start overflow-hidden rounded-2xl border border-surface-container-high/70 bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+                          <ZoomableImage
+                            src={member.img}
+                            alt={member.name}
+                            wrapperClassName="aspect-[4/5] w-full bg-surface-container-low"
+                            className="h-full w-full object-cover"
+                          >
+                            <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#071b43]/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
+                              {member.role}
+                            </span>
+                          </ZoomableImage>
                           <button
                             type="button"
                             aria-expanded={isExpanded}
                             onClick={() => setActiveMember(isExpanded ? null : memberId)}
                             className="flex w-full flex-col text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                           >
-                            <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-container-low">
-                              <img
-                                src={member.img}
-                                alt={member.name}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                loading="lazy"
-                              />
-                              <span className="absolute bottom-3 left-3 rounded-full bg-[#071b43]/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
-                                {member.role}
-                              </span>
-                            </div>
                             <div className="flex min-h-[5.5rem] flex-col items-center p-4 text-center">
                               <h4 className="flex min-h-12 w-full items-center justify-center font-headline-sm text-[15px] font-bold leading-snug text-on-surface sm:text-base">
                                 {member.name}
@@ -377,6 +389,7 @@ export default function About() {
         </section>
 
       </div>
+      {confettiLayer}
     </main>
   );
 }
