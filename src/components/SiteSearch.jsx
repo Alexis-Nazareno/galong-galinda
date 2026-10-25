@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { autoSearchItems } from './siteIndex';
 
 const searchItems = [
   { title: 'Home', detail: 'Galóng Galínda event organization and overview', href: '/', terms: 'home main page organization galing karunungan pakikiisa pakikisama' },
@@ -29,7 +30,21 @@ const searchItems = [
   { title: 'Campus Office', detail: 'Arayat Blvd., Barangay Pampang, Angeles City, Pampanga', href: '/contact', terms: 'campus office address location visit directions map hours' },
   { title: 'Call the Event Manager', detail: '0956 387 1771', href: '/contact', terms: 'call hotline contact number phone 09563871771' },
   { title: 'Email Galóng Galínda', detail: 'galonggalinda@gmail.com', href: '/contact', terms: 'email mail galonggalinda@gmail.com' },
-  { title: 'Follow on Facebook', detail: 'Visit the Galóng Galínda Facebook page', href: '/contact', terms: 'facebook follow social media' }
+  { title: 'Follow on Facebook', detail: 'Visit the Galóng Galínda Facebook page', href: '/contact', terms: 'facebook follow social media' },
+  { title: 'Art of the Call', detail: 'Seminar tarpaulin and workshop photos', href: '/events#section-upcoming', terms: 'art of the call tarpaulin seminar workshop referee' },
+  { title: 'Sepak Takraw Officiating', detail: 'Sepak takraw officiating photos and details', href: '/events#section-upcoming', terms: 'stedar sepak takraw officiating referee photos' },
+  { title: 'Event Manager', detail: 'Lead of the Galóng Galínda team', href: '/about', terms: 'manager head leader president team member name' },
+  { title: 'Dark Mode', detail: 'Switch between light and dark theme', href: '/', terms: 'dark light theme mode toggle appearance' },
+  { title: 'Background Music', detail: 'Play or mute the site music', href: '/', terms: 'music sound audio mute play song' },
+  { title: 'Privacy and Policy', detail: 'Site policies and privacy information', href: '/contact', terms: 'privacy policy terms data anonymous' },
+  { title: 'Likes and Hearts', detail: 'Heart testimonials and activity photos', href: '/#home-testimonials', terms: 'like heart love react favorite' },
+  { title: 'Photo Gallery', detail: 'Browse event photos and galleries', href: '/events#section-upcoming', terms: 'photo photos picture image gallery marquee lightbox' }
+];
+
+const manualTitles = new Set(searchItems.map((item) => item.title.toLowerCase()));
+const allSearchItems = [
+  ...searchItems,
+  ...autoSearchItems.filter((item) => !manualTitles.has(item.title.toLowerCase())),
 ];
 
 const searchSuggestions = [
@@ -72,10 +87,14 @@ export default function SiteSearch({ onClose }) {
 
   const results = useMemo(() => {
     const normalizedQuery = normalizeText(query);
-    const terms = normalizedQuery.split(/\s+/).filter(Boolean);
-    if (terms.length === 0) return [];
+    const stopwords = new Set(['we', 'a', 'an', 'the', 'of', 'to', 'and', 'in', 'on', 'is', 'our', 'for', 'what', 'how', 'do', 'i']);
+    const allTerms = normalizedQuery.split(/\s+/).filter(Boolean);
+    const terms = allTerms.filter((term) => !stopwords.has(term));
+    if (allTerms.length === 0) return [];
+    if (terms.length === 0) terms.push(...allTerms);
 
-    return searchItems
+    const seenResults = new Set();
+    return allSearchItems
       .map((item) => {
         const normalizedTitle = normalizeText(item.title);
         const searchableTokens = new Set(
@@ -83,19 +102,34 @@ export default function SiteSearch({ onClose }) {
             .split(/\s+/)
             .map(normalizeToken),
         );
-        const allTermsMatch = terms.every((term) => searchableTokens.has(normalizeToken(term)));
+        const tokenList = [...searchableTokens];
+        // Terms match the start of a word, so results appear while typing
+        const termMatches = (term, tokens) => {
+          const t = normalizeToken(term);
+          return tokens.some((token) => token === t || token.startsWith(t));
+        };
+        const allTermsMatch = terms.every((term) => termMatches(term, tokenList));
         if (!allTermsMatch) return { ...item, score: 0 };
 
-        const titleTokens = new Set(normalizedTitle.split(/\s+/).map(normalizeToken));
-        const titleMatches = terms.filter((term) => titleTokens.has(normalizeToken(term))).length;
+        const titleTokens = normalizedTitle.split(/\s+/).map(normalizeToken);
+        const titleMatches = terms.filter((term) => termMatches(term, titleTokens)).length;
         const score =
+          1 +
+          (item.page ? 0 : 30) +
           (normalizedTitle === normalizedQuery ? 100 : 0) +
+          (normalizedTitle.startsWith(normalizedQuery) ? 50 : 0) +
           (normalizedTitle.includes(normalizedQuery) ? 40 : 0) +
           titleMatches * 10;
         return { ...item, score };
       })
       .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+      .filter((item) => {
+        const key = `${item.href}|${item.title}`;
+        if (seenResults.has(key)) return false;
+        seenResults.add(key);
+        return true;
+      })
       .slice(0, 6);
   }, [query]);
 
@@ -119,7 +153,9 @@ export default function SiteSearch({ onClose }) {
           <span className="material-symbols-outlined text-primary" aria-hidden="true">search</span>
           <input
             ref={inputRef}
-            type="search"
+            type="text"
+            inputMode="search"
+            autoComplete="off"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search pages, events, products..."
