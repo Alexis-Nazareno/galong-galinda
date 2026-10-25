@@ -402,11 +402,13 @@ export default function Home() {
                   <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-primary-fixed/60 via-surface-container to-secondary-fixed/50 blur-xl opacity-75"></div>
                   {/* Central Phoenix Emblem Container */}
                   <div className="relative z-10 w-72 sm:w-84 h-72 sm:h-84 rounded-full p-2 flex items-center justify-center">
-                    <img
-                      alt="Galóng Galínda Phoenix Emblem"
-                      className="w-full h-full rounded-full object-contain"
-                      src="/gallery/galong-galinda-logo-clean.png"
-                    />
+                    <Link to="/about" aria-label="About Galóng Galínda" className="block h-full w-full rounded-full transition-transform duration-300 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+                      <img
+                        alt="Galóng Galínda Phoenix Emblem"
+                        className="w-full h-full rounded-full object-contain"
+                        src="/gallery/galong-galinda-logo-clean.png"
+                      />
+                    </Link>
                   </div>
                   {/* Floating Kinetic Badges */}
                   <div className="absolute -top-2 right-4 z-20 px-3.5 py-2 rounded-xl bg-surface-container-lowest shadow-md flex items-center gap-2">

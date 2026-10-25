@@ -71,9 +71,12 @@ export default function Products() {
                       src: "/gallery/nutrifit-design-4.png",
                       alt: "Nutrifit Crackers packages",
                     },
-
                     {
                       src: "/gallery/nutrifit-design-3.png",
+                      alt: "Nutrifit Crackers packages",
+                    },
+                    {
+                      src: "/gallery/nutrifit-design-6.jpeg",
                       alt: "Nutrifit Crackers packages",
                     },
                   ]}
@@ -125,6 +128,10 @@ export default function Products() {
                 <ProductImageCarousel
                   label="ArmFeet"
                   images={[
+                    {
+                      src: "/gallery/armfit-design-1.png",
+                      alt: "ArmFeet powder shown with Nutrifit Crackers",
+                    },
                     {
                       src: "/gallery/armfit-design-3.png",
                       alt: "ArmFeet powder shown with Nutrifit Crackers",
