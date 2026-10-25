@@ -255,6 +255,9 @@ export default function Events() {
             event.category === "PE Days"
               ? {
                   ...event,
+                  eventTitle: "2026 PE Days Celebration",
+                  eventDesc:
+                    "The annual two-day athletic celebration promoting movement, sportsmanship, and camaraderie.",
                   photos: [
                     ...event.photos.filter(
                       (photo) => photo.photoTitle === "Mass Aerobics",
