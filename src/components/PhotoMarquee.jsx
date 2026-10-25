@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ZoomableImage from "./ZoomableImage";
 import useConfetti from "./useConfetti";
 
 const HOVER_COOLDOWN_MS = 1800;
 const MIN_SET_SIZE = 6;
+const SECONDS_PER_PHOTO = 6;
+const MARQUEE_EPOCH = performance.now();
 
 export default function PhotoMarquee({ photos, label }) {
   const { fireConfetti, confettiLayer } = useConfetti();
@@ -19,10 +21,16 @@ export default function PhotoMarquee({ photos, label }) {
   const repeats = Math.max(1, Math.ceil(MIN_SET_SIZE / photos.length));
   const set = Array.from({ length: repeats }, () => photos).flat();
   const loop = [...set, ...set];
+  const duration = set.length * SECONDS_PER_PHOTO;
+  // Same speed per photo, and a shared clock so every marquee moves in step
+  const [offset] = useState(() => ((performance.now() - MARQUEE_EPOCH) / 1000) % duration);
 
   return (
     <div className="photo-marquee" role="group" aria-label={label}>
-      <div className="photo-marquee-track">
+      <div
+        className="photo-marquee-track"
+        style={{ animationDuration: `${duration}s`, animationDelay: `-${offset}s` }}
+      >
         {loop.map((photo, index) => {
           const isClone = index >= photos.length;
           return (

@@ -35,7 +35,6 @@ export default function useConfetti() {
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
   const fireConfetti = useCallback((element) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const rect = element?.getBoundingClientRect();
     if (!rect) return;
     clearTimeout(timeoutRef.current);

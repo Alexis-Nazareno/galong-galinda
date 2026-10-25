@@ -68,12 +68,12 @@ const featuredGalleryEvents = [
         photoDesc:
           "Sports officials help ensure the Sepak Takraw game is conducted fairly and according to the rules.",
       },
-      {
-        imgSrc: "/gallery/so%20(5).jpg",
-        photoTitle: "Sport Officiating",
-        photoDesc:
-          "Participants practice sports officiating skills during a hands-on training session.",
-      },
+      // {
+      //   imgSrc: "/gallery/so%20(5).jpg",
+      //   photoTitle: "Sport Officiating",
+      //   photoDesc:
+      //     "Participants practice sports officiating skills during a hands-on training session.",
+      // },
       ...[1, 2, 3, 4].map((n) => ({
         imgSrc: `/gallery/sports-officiating-${n}.jpg`,
         photoTitle: "Sport Officiating",
@@ -89,12 +89,12 @@ const featuredGalleryEvents = [
       "Practical learning experiences that build participants’ confidence and skills through technical training, demonstrations, and officiating practice.",
     category: "Seminars & Workshops",
     photos: [
-      {
-        imgSrc: "/gallery/officiating.jpg",
-        photoTitle: "Referee Delegation",
-        photoDesc:
-          "Participants develop officiating skills through technical training and demonstrations.",
-      },
+      // {
+      //   imgSrc: "/gallery/officiating.jpg",
+      //   photoTitle: "Referee Delegation",
+      //   photoDesc:
+      //     "Participants develop officiating skills through technical training and demonstrations.",
+      // },
       {
         imgSrc: "/gallery/so%20(6).jpg",
         photoTitle: "Seminar-Workshops",
@@ -106,7 +106,11 @@ const featuredGalleryEvents = [
   },
 ];
 
-const MARQUEE_CATEGORIES = ["PE Days", "Sports Officiating", "Seminars & Workshops"];
+const MARQUEE_CATEGORIES = [
+  "PE Days",
+  "Sports Officiating",
+  "Seminars & Workshops",
+];
 
 const seminarTarpaulinPhotos = [
   { imgSrc: "/gallery/art-of-the-call-tarpaulin.jpg" },

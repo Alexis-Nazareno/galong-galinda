@@ -25,7 +25,6 @@ export default function PosterSparkleImage({ className = "", ...imgProps }) {
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
   const handleClick = () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const rect = imageRef.current?.getBoundingClientRect();
     if (!rect) return;
     clearTimeout(timeoutRef.current);
