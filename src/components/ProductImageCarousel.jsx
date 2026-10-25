@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import ZoomableImage from './ZoomableImage';
 
 export default function ProductImageCarousel({ images, label }) {
   const [activeImage, setActiveImage] = useState(0);
@@ -54,9 +55,10 @@ export default function ProductImageCarousel({ images, label }) {
               aria-hidden={!isActive}
               className={`absolute inset-0 transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isActive ? 'scale-100 opacity-100 blur-0' : 'pointer-events-none scale-105 opacity-0 blur-sm'}`}
             >
-              <img
+              <ZoomableImage
                 src={image.src}
                 alt={image.alt}
+                wrapperClassName="block h-full w-full cursor-zoom-in"
                 className="h-full w-full object-cover"
               />
             </div>
