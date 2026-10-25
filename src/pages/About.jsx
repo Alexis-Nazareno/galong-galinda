@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ZoomableImage from '../components/ZoomableImage';
 import useConfetti from '../components/useConfetti';
 
@@ -10,6 +10,26 @@ export default function About() {
     setActivePillar(activePillar === index ? null : index);
   };
   const [activeMember, setActiveMember] = useState(null);
+
+  useEffect(() => {
+    if (activeMember === null) return undefined;
+    const handlePointerDown = (event) => {
+      if (!event.target.closest(`[data-team-member="${activeMember}"]`)) setActiveMember(null);
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setActiveMember(null);
+    };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeMember]);
+
+  const toggleMember = (memberId) => {
+    setActiveMember((current) => (current === memberId ? null : memberId));
+  };
   const showTeamSection = true;
 
   // Team data grouped by department for the new split-role design
@@ -17,34 +37,34 @@ export default function About() {
     {
       category: "Event Management & Coordination",
       members: [
-        { role: "Event Manager", name: "Angela E. Ellegue", img: "/gallery/team/pic%20(2).jpg" },
-        { role: "Assistant Manager", name: "Edmon S. Licup", img: "/gallery/team/pic%20(1).jpg" },
-        { role: "Coordinator", name: "Jasper A. Dalusung", img: "/gallery/team/pic%20(7).jpg" },
+        { role: "Event Manager", name: "Angela E. Ellegue", img: "/gallery/team/ellegue.jpg" },
+        { role: "Assistant Manager", name: "Edmon S. Licup", img: "/gallery/team/licup.jpeg" },
+        { role: "Coordinator", name: "Jasper A. Dalusung", img: "/gallery/team/dalusung.jpg" },
       ]
     },
     {
       category: "Budget & Finance",
       members: [
-        { role: "Budget", name: "Alfreda Joy E. Magisa", img: "/gallery/team/pic%20(6).jpg" },
-        { role: "Budget", name: "Nicole A. Quinto", img: "/gallery/team/pic%20(3).jpg" },
+        { role: "Budget", name: "Alfreda Joy E. Magisa", img: "/gallery/team/magisa.jpg" },
+        { role: "Budget", name: "Nicole A. Quinto", img: "/gallery/team/quinto.jpg" },
       ]
     },
     {
       category: "Infrastructure & Security",
       members: [
-        { role: "Infrastructure", name: "Sean Alexis Quismondo", img: "/gallery/team/pic%20(5).jpg" },
-        { role: "Infrastructure", name: "Arvi John S. Solano", img: "/gallery/team/pic%20(4).jpg" },
-        { role: "Security", name: "Aaron C. Cortez", img: "/gallery/team/pic%20(12).jpg" },
-        { role: "Security", name: "Mikel Dean P. Lobo", img: "/gallery/team/pic%20(13).jpg" },
+        { role: "Infrastructure", name: "Sean Alexis Quismondo", img: "/gallery/team/quismondo.jpg" },
+        { role: "Infrastructure", name: "Arvi John S. Solano", img: "/gallery/team/solano.jpg" },
+        { role: "Security", name: "Aaron C. Cortez", img: "/gallery/team/cortez.jpg" },
+        { role: "Security", name: "Mikel Dean P. Lobo", img: "/gallery/team/lobo.jpg" },
       ]
     },
     {
       category: "Information & Logistics",
       members: [
-        { role: "Information", name: "Christine Joy S. Valdevieso", img: "/gallery/team/pic%20(10).jpg" },
-        { role: "Information", name: "Niña Reachelle M. Nunag", img: "/gallery/team/pic%20(9).jpg" },
-        { role: "Logistics", name: "Jonaira M. Bonsa", img: "/gallery/team/pic%20(8).jpg" },
-        { role: "Logistics", name: "Andrew G. Magpantay", img: "/gallery/team/pic%20(11).jpg" }
+        { role: "Information", name: "Christine Joy S. Valdevieso", img: "/gallery/team/valdevieso.jpeg" },
+        { role: "Information", name: "Niña Reachelle M. Nunag", img: "/gallery/team/nunag.jpg" },
+        { role: "Logistics", name: "Jonaira M. Bonsa", img: "/gallery/team/bonsa.jpg" },
+        { role: "Logistics", name: "Andrew G. Magpantay", img: "/gallery/team/magpantay.jpg" }
       ]
     }
   ];
@@ -320,13 +340,14 @@ export default function About() {
                   </h3>
                   
                   {/* Members Grid (2 Columns on Mobile, 4-5 on Desktop) */}
-                  <div className="grid grid-cols-2 items-start md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10">
+                  <div className="team-grid">
                     {group.members.map((member, memberIdx) => {
                       const memberId = `${groupIdx}-${memberIdx}`;
                       const isExpanded = activeMember === memberId;
 
                       return (
-                        <div key={memberId} className="group w-full self-start overflow-hidden rounded-2xl border border-surface-container-high/70 bg-surface-container-lowest shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+                        <div key={memberId} data-team-member={memberId} className={`team-item ${isExpanded ? 'team-item-open' : ''}`}>
+                        <div className={`team-card group overflow-hidden rounded-2xl border border-[#071b43]/15 bg-gradient-to-b from-white via-[#eef2ff] to-[#d9e3ff] shadow-md shadow-[#071b43]/10 dark:border-white/10 dark:from-[#16213f] dark:via-[#121a33] dark:to-[#0d1427] dark:shadow-black/40 transition-all ${isExpanded ? 'rounded-r-none border-r-0' : 'hover:-translate-y-1 hover:shadow-lg'}`}>
                           <ZoomableImage
                             src={member.img}
                             alt={member.name}
@@ -340,7 +361,7 @@ export default function About() {
                           <button
                             type="button"
                             aria-expanded={isExpanded}
-                            onClick={() => setActiveMember(isExpanded ? null : memberId)}
+                            onClick={() => toggleMember(memberId)}
                             className="flex w-full flex-col text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                           >
                             <div className="flex min-h-[5.5rem] flex-col items-center p-4 text-center">
@@ -350,16 +371,20 @@ export default function About() {
                               <span className="mt-2 inline-flex min-h-5 w-full items-center justify-center gap-1 text-xs font-semibold text-primary">
                                 {isExpanded ? 'Hide responsibilities' : 'View responsibilities'}
                                 <span className="material-symbols-outlined text-base" aria-hidden="true">
-                                  {isExpanded ? 'expand_less' : 'expand_more'}
+                                  {isExpanded ? 'chevron_left' : 'chevron_right'}
                                 </span>
                               </span>
-                              {isExpanded && (
-                                <p className="mt-3 border-t border-surface-container-high pt-3 text-sm leading-relaxed text-on-surface-variant">
-                                  {teamResponsibilities[member.role]}
-                                </p>
-                              )}
                             </div>
                           </button>
+                        </div>
+                        <div className="team-panel" aria-hidden={!isExpanded}>
+                          <aside className="team-panel-inner">
+                            <span className="team-panel-accent" aria-hidden="true" />
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">{member.role}</p>
+                            <h5 className="font-headline-sm text-lg font-bold text-on-surface">{member.name}</h5>
+                            <p className="text-sm leading-relaxed text-on-surface-variant">{teamResponsibilities[member.role]}</p>
+                          </aside>
+                        </div>
                         </div>
                       );
                     })}
