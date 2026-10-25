@@ -45,17 +45,23 @@ export default function ProductImageCarousel({ images, label }) {
         if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
       }}
     >
-      <div className="flex h-full w-full overflow-hidden">
-        {images.map((image, index) => (
-          <img
-            key={image.src}
-            src={image.src}
-            alt={image.alt}
-            aria-hidden={activeImage !== index}
-            className="h-full w-full shrink-0 object-cover transition-transform duration-500"
-            style={{ transform: `translateX(-${activeImage * 100}%)` }}
-          />
-        ))}
+      <div className="relative h-full w-full overflow-hidden">
+        {images.map((image, index) => {
+          const isActive = activeImage === index;
+          return (
+            <div
+              key={image.src}
+              aria-hidden={!isActive}
+              className={`absolute inset-0 transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isActive ? 'scale-100 opacity-100 blur-0' : 'pointer-events-none scale-105 opacity-0 blur-sm'}`}
+            >
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          );
+        })}
       </div>
       <div className="absolute inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8">
         <div className="flex items-center gap-1" role="group" aria-label={`${label} photo slides`}>
