@@ -146,6 +146,12 @@ function EventHighlightCard({ highlight, isExpanded, onToggle }) {
             <p className="mt-4 font-body-sm text-body-sm leading-relaxed text-on-surface-variant">
               {highlight.details}
             </p>
+            {highlight.photoCredit && (
+              <p className="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+                <span aria-hidden="true">📸</span>
+                <span className="sr-only">Photo credit</span>: {highlight.photoCredit}
+              </p>
+            )}
             <div className="mt-4 grid grid-cols-2 gap-3">
               {highlight.photos.slice(0, 4).map((photo, index) => (
                 <ZoomableImage
@@ -218,7 +224,8 @@ export default function Home() {
           alt: "PE Days team posing together after their performance",
         },
       ],
-      link: "/events?tab=previous&category=PE%20Days#gallery-event-pe-days",
+      link: "/events?tab=previous#gallery-event-pe-days",
+      photoCredit: "Jennie Libutano",
       action: "Explore events",
     },
     {
@@ -334,7 +341,7 @@ export default function Home() {
                 <div className="flex flex-col gap-space-sm">
                   <h1 className="font-display-hero text-display-hero-mobile lg:text-display-hero text-on-surface tracking-tight leading-[1.08]">
                     We are the{" "}
-                    <span className="text-primary">Galóng Galínda</span> Event
+                    <Link to="/about" className="text-primary transition-colors hover:text-tertiary hover:underline underline-offset-4">Galóng Galínda</Link> Event
                     Organization
                   </h1>
                   <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl pt-space-xs">

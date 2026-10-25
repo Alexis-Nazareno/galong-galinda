@@ -5,18 +5,15 @@ import SiteSearch from './SiteSearch';
 export default function Header() {
   const location = useLocation();
   const path = location.pathname;
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    () =>
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+  );
 
-  // Check initial state from local storage or OS preference
   useEffect(() => {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
 
   const toggleDarkMode = () => {
     if (isDarkMode) {
@@ -62,10 +59,11 @@ export default function Header() {
       <div className="h-20 bg-surface-container-lowest/95 backdrop-blur-md px-margin-mobile lg:px-margin flex items-center justify-between relative">
         
         {/* UPPER LEFT LOGO WITH KINETIC ENERGY */}
+        <div className="flex items-center gap-space-md">
         <Link
           to="/"
           onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
-          className="flex items-center gap-space-md group"
+          className="group flex items-center"
           aria-label="Galóng Galínda home and back to top"
         >
           
@@ -90,17 +88,18 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Text Container (Title + Motto) */}
-          <div className="flex flex-col">
+        </Link>
+
+        {/* Title + Motto link to About Us */}
+        <Link to="/about" aria-label="About Galóng Galínda" className="group flex flex-col">
             <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-tight group-hover:text-tertiary transition-colors duration-300">
               GALÓNG GALÍNDA
             </span>
             <span className="font-label-badge text-label-badge text-secondary font-semibold uppercase tracking-wider">
               Patinikang Gâlo, Ipákit Ing Galíng Da
             </span>
-          </div>
-
         </Link>
+        </div>
         
         {/* Desktop Navigation */}
         <nav className="hidden xl:flex items-center gap-space-lg h-full">

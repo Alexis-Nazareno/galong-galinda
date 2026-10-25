@@ -5,6 +5,7 @@ import { trackNetworkActivity } from "../utils/networkActivity";
 import LikeButton from "../components/LikeButton";
 import PosterSparkleImage from "../components/PosterSparkleImage";
 import ZoomableImage from "../components/ZoomableImage";
+import PhotoMarquee from "../components/PhotoMarquee";
 import useConfetti from "../components/useConfetti";
 
 const normalizeEventStatus = (status = "") =>
@@ -40,7 +41,8 @@ const featuredUpcomingEvent = {
 
 const featuredOngoingEvent = {
   eventId: "bped-web-fusion",
-  eventTitle: "Event 4: Battle of the Websites — BPED Web Fusion",
+  eventTitle:
+    "Battle of the Websites: CONTROL, CREATE, AND ACTIVATE - BPED Web Fusion",
   status: "Ongoing Event",
   eventDate: "October 26, 2026",
   eventTime: "1:00 P.M. – 5:00 P.M.",
@@ -110,9 +112,18 @@ const photoFullDescriptions = {
     "Facilitators share interactive learning activities and officiating demonstrations. Participants take part in guided discussions, practical drills, and feedback sessions that strengthen their understanding of the rules and their ability to apply them in actual games.",
   "Volleyball Seminar Workshops":
     "Participants and organizers gather during a volleyball officiating seminar workshop. The session covers rules, signals, court positioning, and scoring procedures, with hands-on practice so attendees can officiate volleyball matches with confidence.",
-  "PE Days Zumba Competition":
-    "Participants perform a coordinated Zumba routine as part of the PE Days competition. Teams showcase rhythm, energy, and creativity while promoting fitness, camaraderie, and school spirit throughout the celebration of movement and teamwork.",
+  "PE Days 2026":
+    "Moments captured during PE Days 2026! A glimpse of the torch lighting, the delegations' march, and the energy of students celebrating movement, teamwork, and school spirit.",
 };
+
+const PE_DAYS_PHOTO_TITLE = "PE Days 2026";
+const PE_DAYS_PHOTO_DESC = "Moments captured during PE Days 2026!";
+const peDaysExtraPhotos = [
+  { imgSrc: "/gallery/pe-days-2026-2.jpg" },
+  { imgSrc: "/gallery/pe-days-2026-1.jpg" },
+
+  { imgSrc: "/gallery/pe-days-2026-3.jpg" },
+];
 
 export default function Events() {
   const location = useLocation();
@@ -134,7 +145,9 @@ export default function Events() {
 
   const togglePhotoCard = (cardId, cardElement) => {
     if (flippedPhotoCardId !== cardId) fireConfetti(cardElement);
-    setFlippedPhotoCardId((currentId) => (currentId === cardId ? null : cardId));
+    setFlippedPhotoCardId((currentId) =>
+      currentId === cardId ? null : cardId,
+    );
   };
 
   useEffect(() => {
@@ -201,9 +214,6 @@ export default function Events() {
                 "Participants and organizers gather during a volleyball officiating seminar workshop.";
               seminarWorkshopPhotos.push(photo);
             } else if (photo.photoTitle === "Mass Aerobics") {
-              photo.photoTitle = "PE Days Zumba Competition";
-              photo.photoDesc =
-                "Participants perform a coordinated Zumba routine as part of the PE Days competition.";
               acc[row.eventId].photos.push(photo);
             } else {
               acc[row.eventId].photos.push(photo);
@@ -219,9 +229,27 @@ export default function Events() {
           return acc;
         }, {});
 
-        const sheetEvents = Object.values(groupedEventsMap).filter(
-          (event) => event.photos.length > 0 || event.videos.length > 0,
-        );
+        const sheetEvents = Object.values(groupedEventsMap)
+          .map((event) =>
+            event.category === "PE Days"
+              ? {
+                  ...event,
+                  photos: [
+                    ...event.photos.filter(
+                      (photo) => photo.photoTitle === "Mass Aerobics",
+                    ),
+                    ...peDaysExtraPhotos,
+                  ].map((photo) => ({
+                    ...photo,
+                    photoTitle: PE_DAYS_PHOTO_TITLE,
+                    photoDesc: PE_DAYS_PHOTO_DESC,
+                  })),
+                }
+              : event,
+          )
+          .filter(
+            (event) => event.photos.length > 0 || event.videos.length > 0,
+          );
         const featuredEventIds = new Set(
           featuredGalleryEvents.map((event) => event.eventId),
         );
@@ -430,143 +458,148 @@ export default function Events() {
                     ? visibleScheduledEvents
                     : visibleSchedule
                   ).map((item, index) => (
-                <article
-                  key={item.eventTitle || index}
-                  className={`flex flex-col overflow-hidden rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest shadow-sm transition-all hover:shadow-md ${item.image ? "md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-12" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-card" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-card" : ""}`}
-                >
-                  {item.image && (
-                    <div
-                      className={`flex items-center justify-center overflow-hidden ${item.eventId === "bped-web-fusion" ? "bped-event-poster md:col-span-2 lg:col-span-5" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-poster md:col-span-2 lg:col-span-5" : "h-96 bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]"}`}
+                    <article
+                      key={item.eventTitle || index}
+                      className={`flex flex-col overflow-hidden rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest shadow-sm transition-all hover:shadow-md ${item.image ? "md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-12" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-card" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-card" : ""}`}
                     >
-                      {item.eventId === "ibm-days-manawari-2026" ? (
-                        <ZoomableImage
-                          src={item.image}
-                          alt={`${item.eventTitle} event poster`}
-                          wrapperClassName="ember-glow-poster block h-[calc(100%-1.5rem)] w-auto rounded-md"
-                          className="!p-0 h-full w-auto max-w-full object-contain"
-                        />
-                      ) : item.eventId === "bped-web-fusion" ? (
-                        <ZoomableImage
-                          src={item.image}
-                          alt={`${item.eventTitle} event poster`}
-                          wrapperClassName="ember-glow-poster block h-full w-full"
-                          className="h-full w-full object-cover"
+                      {item.image && (
+                        <div
+                          className={`flex items-center justify-center overflow-hidden ${item.eventId === "bped-web-fusion" ? "bped-event-poster md:col-span-2 lg:col-span-5" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-poster md:col-span-2 lg:col-span-5" : "h-96 bg-surface-container-low p-3 lg:col-span-5 lg:h-[32rem]"}`}
                         >
-                          <span className="fire-drip-field" aria-hidden="true">
-                            {[8, 19, 31, 44, 56, 68, 80, 91].map((left, i) => (
+                          {item.eventId === "ibm-days-manawari-2026" ? (
+                            <ZoomableImage
+                              src={item.image}
+                              alt={`${item.eventTitle} event poster`}
+                              wrapperClassName="ember-glow-poster block h-[calc(100%-1.5rem)] w-auto rounded-md"
+                              className="!p-0 h-full w-auto max-w-full object-contain"
+                            />
+                          ) : item.eventId === "bped-web-fusion" ? (
+                            <ZoomableImage
+                              src={item.image}
+                              alt={`${item.eventTitle} event poster`}
+                              wrapperClassName="ember-glow-poster block h-full w-full"
+                              className="h-full w-full object-cover"
+                            >
                               <span
-                                key={left}
-                                className="fire-drip"
-                                style={{
-                                  left: `${left}%`,
-                                  animationDelay: `${(i * 430) % 2600}ms`,
-                                  animationDuration: `${2200 + (i % 3) * 400}ms`,
-                                }}
-                              />
-                            ))}
-                          </span>
-                        </ZoomableImage>
-                      ) : (
-                      <PosterSparkleImage
-                        src={item.image}
-                        alt={`${item.eventTitle} event poster`}
-                        loading={
-                          item.eventId === "bped-web-fusion" ||
-                          item.eventId === "ibm-days-manawari-2026"
-                            ? "eager"
-                            : "lazy"
-                        }
-                        decoding="async"
-                        fetchPriority={
-                          item.eventId === "bped-web-fusion" ||
-                          item.eventId === "ibm-days-manawari-2026"
-                            ? "high"
-                            : "auto"
-                        }
-                        className={`h-full w-full ${item.eventId === "bped-web-fusion" ? "object-cover" : "object-contain"}`}
-                      />
+                                className="fire-drip-field"
+                                aria-hidden="true"
+                              >
+                                {[8, 19, 31, 44, 56, 68, 80, 91].map(
+                                  (left, i) => (
+                                    <span
+                                      key={left}
+                                      className="fire-drip"
+                                      style={{
+                                        left: `${left}%`,
+                                        animationDelay: `${(i * 430) % 2600}ms`,
+                                        animationDuration: `${2200 + (i % 3) * 400}ms`,
+                                      }}
+                                    />
+                                  ),
+                                )}
+                              </span>
+                            </ZoomableImage>
+                          ) : (
+                            <PosterSparkleImage
+                              src={item.image}
+                              alt={`${item.eventTitle} event poster`}
+                              loading={
+                                item.eventId === "bped-web-fusion" ||
+                                item.eventId === "ibm-days-manawari-2026"
+                                  ? "eager"
+                                  : "lazy"
+                              }
+                              decoding="async"
+                              fetchPriority={
+                                item.eventId === "bped-web-fusion" ||
+                                item.eventId === "ibm-days-manawari-2026"
+                                  ? "high"
+                                  : "auto"
+                              }
+                              className={`h-full w-full ${item.eventId === "bped-web-fusion" ? "object-cover" : "object-contain"}`}
+                            />
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
-                  <div
-                    className={`flex flex-1 flex-col gap-5 p-6 ${item.image ? "featured-event-panel lg:col-span-7 lg:justify-center lg:p-8" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-details" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-details" : ""}`}
-                  >
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span
-                          className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}
-                        >
-                          {item.status || "Upcoming"}
-                        </span>
-                        <span className="flex items-center gap-1 font-label text-xs text-on-surface-variant">
-                          <span
-                            className="material-symbols-outlined text-[14px] text-primary"
-                            aria-hidden="true"
-                          >
-                            calendar_today
-                          </span>
-                          {item.eventDate}
-                        </span>
-                      </div>
-                      <h3 className="font-headline text-lg font-bold text-on-surface">
-                        {item.eventTitle}
-                      </h3>
-                      <p className="font-body text-sm leading-relaxed text-on-surface-variant">
-                        {item.description || item.desc}
-                      </p>
-                    </div>
+                      <div
+                        className={`flex flex-1 flex-col gap-5 p-6 ${item.image ? "featured-event-panel lg:col-span-7 lg:justify-center lg:p-8" : ""} ${item.eventId === "bped-web-fusion" ? "bped-event-details" : ""} ${item.eventId === "ibm-days-manawari-2026" ? "ibm-event-details" : ""}`}
+                      >
+                        <div className="flex flex-col gap-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span
+                              className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}
+                            >
+                              {item.status || "Upcoming"}
+                            </span>
+                            <span className="flex items-center gap-1 font-label text-xs text-on-surface-variant">
+                              <span
+                                className="material-symbols-outlined text-[14px] text-primary"
+                                aria-hidden="true"
+                              >
+                                calendar_today
+                              </span>
+                              {item.eventDate}
+                            </span>
+                          </div>
+                          <h3 className="font-headline text-lg font-bold text-on-surface">
+                            {item.eventTitle}
+                          </h3>
+                          <p className="font-body text-sm leading-relaxed text-on-surface-variant">
+                            {item.description || item.desc}
+                          </p>
+                        </div>
 
-                    <div className="mt-1 flex flex-col gap-3 border-t border-surface-container-high/50 pt-4">
-                      <div className="flex flex-col gap-2 text-xs font-label text-on-surface-variant">
-                        {item.eventTime && (
-                          <span className="flex items-start gap-1">
-                            <span
-                              className="material-symbols-outlined text-[14px]"
-                              aria-hidden="true"
+                        <div className="mt-1 flex flex-col gap-3 border-t border-surface-container-high/50 pt-4">
+                          <div className="flex flex-col gap-2 text-xs font-label text-on-surface-variant">
+                            {item.eventTime && (
+                              <span className="flex items-start gap-1">
+                                <span
+                                  className="material-symbols-outlined text-[14px]"
+                                  aria-hidden="true"
+                                >
+                                  schedule
+                                </span>
+                                <span>{item.eventTime}</span>
+                              </span>
+                            )}
+                            {item.venue && (
+                              <span className="flex items-center gap-1 font-semibold text-on-surface">
+                                <span
+                                  className="material-symbols-outlined text-[14px] text-tertiary"
+                                  aria-hidden="true"
+                                >
+                                  location_on
+                                </span>
+                                {item.venue}
+                              </span>
+                            )}
+                          </div>
+                          {item.ctaLink && (
+                            <a
+                              href={item.ctaLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-center font-label-md text-white shadow-sm transition-colors hover:bg-primary-container hover:text-on-primary-container"
                             >
-                              schedule
-                            </span>
-                            <span>{item.eventTime}</span>
-                          </span>
-                        )}
-                        {item.venue && (
-                          <span className="flex items-center gap-1 font-semibold text-on-surface">
-                            <span
-                              className="material-symbols-outlined text-[14px] text-tertiary"
-                              aria-hidden="true"
-                            >
-                              location_on
-                            </span>
-                            {item.venue}
-                          </span>
-                        )}
+                              <span>View Details</span>
+                              <span
+                                className="material-symbols-outlined text-[16px]"
+                                aria-hidden="true"
+                              >
+                                open_in_new
+                              </span>
+                            </a>
+                          )}
+                        </div>
                       </div>
-                      {item.ctaLink && (
-                        <a
-                          href={item.ctaLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-center font-label-md text-white shadow-sm transition-colors hover:bg-primary-container hover:text-on-primary-container"
-                        >
-                          <span>View Details</span>
-                          <span
-                            className="material-symbols-outlined text-[16px]"
-                            aria-hidden="true"
-                          >
-                            open_in_new
-                          </span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </article>
+                    </article>
                   ))}
 
                   {activeEventTab === "upcoming" &&
                     visibleScheduledEvents.length === 0 && (
                       <div className="col-span-full rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest py-12 text-center font-body-sm text-on-surface-variant">
-                        No upcoming events scheduled at the moment. Please
-                        check back soon!
+                        No upcoming events scheduled at the moment. Please check
+                        back soon!
                       </div>
                     )}
                   {activeEventTab === "ongoing" &&
@@ -638,237 +671,254 @@ export default function Events() {
                       }
                       className="scroll-mt-32 rounded-2xl border border-surface-container-high/60 bg-surface-container-lowest p-5 shadow-sm sm:p-6"
                     >
-                  <div className="mb-5">
-                    <span className="mb-2 inline-flex rounded-full bg-secondary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary">
-                      {event.category}
-                    </span>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <h3 className="font-headline text-xl font-bold text-on-surface">
-                        {event.eventTitle}
-                      </h3>
-                    </div>
-                    {event.eventDesc && (
-                      <p className="mt-2 font-body text-sm text-on-surface-variant leading-relaxed">
-                        {event.eventDesc}
-                      </p>
-                    )}
-                    <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-surface-container-high/60 pt-3 text-xs text-on-surface-variant">
-                      {event.eventDate && (
-                        <span className="inline-flex items-center gap-1.5">
-                          <span
-                            className="material-symbols-outlined text-[15px] text-primary"
-                            aria-hidden="true"
-                          >
-                            calendar_today
-                          </span>
-                          <span>
-                            <strong className="text-on-surface">Date:</strong>{" "}
-                            {event.eventDate}
-                          </span>
+                      <div className="mb-5">
+                        <span className="mb-2 inline-flex rounded-full bg-secondary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-secondary">
+                          {event.category}
                         </span>
-                      )}
-                      {event.eventVenue && (
-                        <span className="inline-flex items-center gap-1.5">
-                          <span
-                            className="material-symbols-outlined text-[15px] text-tertiary"
-                            aria-hidden="true"
-                          >
-                            location_on
-                          </span>
-                          <span>
-                            <strong className="text-on-surface">Venue:</strong>{" "}
-                            {event.eventVenue}
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  {event.photos.length > 0 && (
-                    <div className="mb-6">
-                      <h4 className="mb-3 flex items-center gap-2 font-label-lg text-label-lg font-bold text-on-surface">
-                        <span
-                          className="material-symbols-outlined text-[18px] text-primary"
-                          aria-hidden="true"
-                        >
-                          photo_library
-                        </span>
-                        Event Photos
-                      </h4>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {event.photos.map((photo, index) => (
-                          <div
-                            key={`${event.eventId}-photo-${index}`}
-                            className="event-photo-card-scene"
-                            role="button"
-                            tabIndex={0}
-                            aria-pressed={
-                              flippedPhotoCardId ===
-                              `${event.eventId}-photo-${index}`
-                            }
-                            aria-label={`Toggle details for ${photo.photoTitle || event.eventTitle}`}
-                            onClick={(eventTrigger) =>
-                              togglePhotoCard(
-                                `${event.eventId}-photo-${index}`,
-                                eventTrigger.currentTarget,
-                              )
-                            }
-                            onKeyDown={(eventTrigger) => {
-                              if (
-                                eventTrigger.key === "Enter" ||
-                                eventTrigger.key === " "
-                              ) {
-                                eventTrigger.preventDefault();
-                                togglePhotoCard(
-                                  `${event.eventId}-photo-${index}`,
-                                  eventTrigger.currentTarget,
-                                );
-                              }
-                            }}
-                          >
-                            <article
-                              className={`event-photo-card-flipper ${flippedPhotoCardId === `${event.eventId}-photo-${index}` ? "is-flipped" : ""}`}
+                        <div className="flex flex-wrap items-center gap-3">
+                          <h3 className="font-headline text-xl font-bold text-on-surface">
+                            {event.eventTitle}
+                          </h3>
+                        </div>
+                        {event.eventDesc && (
+                          <p className="mt-2 font-body text-sm text-on-surface-variant leading-relaxed">
+                            {event.eventDesc}
+                          </p>
+                        )}
+                        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-surface-container-high/60 pt-3 text-xs text-on-surface-variant">
+                          {event.eventDate && (
+                            <span className="inline-flex items-center gap-1.5">
+                              <span
+                                className="material-symbols-outlined text-[15px] text-primary"
+                                aria-hidden="true"
+                              >
+                                calendar_today
+                              </span>
+                              <span>
+                                <strong className="text-on-surface">
+                                  Date:
+                                </strong>{" "}
+                                {event.eventDate}
+                              </span>
+                            </span>
+                          )}
+                          {event.eventVenue && (
+                            <span className="inline-flex items-center gap-1.5">
+                              <span
+                                className="material-symbols-outlined text-[15px] text-tertiary"
+                                aria-hidden="true"
+                              >
+                                location_on
+                              </span>
+                              <span>
+                                <strong className="text-on-surface">
+                                  Venue:
+                                </strong>{" "}
+                                {event.eventVenue}
+                              </span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {event.photos.length > 0 && (
+                        <div className="mb-6">
+                          <h4 className="mb-3 flex items-center gap-2 font-label-lg text-label-lg font-bold text-on-surface">
+                            <span
+                              className="material-symbols-outlined text-[18px] text-primary"
+                              aria-hidden="true"
                             >
-                              <div className="event-photo-card-face event-photo-card-front overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest">
-                                <ZoomableImage
-                                  alt={photo.photoTitle || event.eventTitle}
-                                  wrapperClassName="h-48 w-full bg-surface-container"
-                                  className="h-full w-full object-cover"
-                                  src={photo.imgSrc}
-                                />
-                                <div className="flex flex-1 flex-col gap-4 p-4">
-                                  {photo.photoTitle && (
-                                    <h4 className="font-label-lg font-bold text-on-surface">
-                                      {photo.photoTitle}
-                                    </h4>
-                                  )}
-                                  {(photo.eventDate || photo.date) && (
-                                    <p className="mt-1 text-xs text-on-surface-variant">
-                                      {photo.eventDate || photo.date}
-                                    </p>
-                                  )}
-                                  {photo.photoDesc && (
-                                    <p className="event-photo-front-desc mt-2 font-body-sm text-sm leading-relaxed text-on-surface-variant">
-                                      {photo.photoDesc}
-                                    </p>
-                                  )}
-                                  <div
-                                    className="mt-auto self-start"
-                                    onClick={(eventTrigger) =>
-                                      eventTrigger.stopPropagation()
+                              photo_library
+                            </span>
+                            Event Photos
+                          </h4>
+                          {event.category === "PE Days" ? (
+                            <PhotoMarquee
+                              photos={event.photos}
+                              label="PE Days 2026 photo"
+                            />
+                          ) : (
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                              {event.photos.map((photo, index) => (
+                                <div
+                                  key={`${event.eventId}-photo-${index}`}
+                                  className="event-photo-card-scene"
+                                  role="button"
+                                  tabIndex={0}
+                                  aria-pressed={
+                                    flippedPhotoCardId ===
+                                    `${event.eventId}-photo-${index}`
+                                  }
+                                  aria-label={`Toggle details for ${photo.photoTitle || event.eventTitle}`}
+                                  onClick={(eventTrigger) =>
+                                    togglePhotoCard(
+                                      `${event.eventId}-photo-${index}`,
+                                      eventTrigger.currentTarget,
+                                    )
+                                  }
+                                  onKeyDown={(eventTrigger) => {
+                                    if (
+                                      eventTrigger.key === "Enter" ||
+                                      eventTrigger.key === " "
+                                    ) {
+                                      eventTrigger.preventDefault();
+                                      togglePhotoCard(
+                                        `${event.eventId}-photo-${index}`,
+                                        eventTrigger.currentTarget,
+                                      );
                                     }
-                                    onKeyDown={(eventTrigger) =>
-                                      eventTrigger.stopPropagation()
+                                  }}
+                                >
+                                  <article
+                                    className={`event-photo-card-flipper ${flippedPhotoCardId === `${event.eventId}-photo-${index}` ? "is-flipped" : ""}`}
+                                  >
+                                    <div className="event-photo-card-face event-photo-card-front overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest">
+                                      <ZoomableImage
+                                        alt={
+                                          photo.photoTitle || event.eventTitle
+                                        }
+                                        wrapperClassName="h-48 w-full bg-surface-container"
+                                        className="h-full w-full object-cover"
+                                        src={photo.imgSrc}
+                                      />
+                                      <div className="flex flex-1 flex-col gap-4 p-4">
+                                        {photo.photoTitle && (
+                                          <h4 className="font-label-lg font-bold text-on-surface">
+                                            {photo.photoTitle}
+                                          </h4>
+                                        )}
+                                        {(photo.eventDate || photo.date) && (
+                                          <p className="mt-1 text-xs text-on-surface-variant">
+                                            {photo.eventDate || photo.date}
+                                          </p>
+                                        )}
+                                        {photo.photoDesc && (
+                                          <p className="event-photo-front-desc mt-2 font-body-sm text-sm leading-relaxed text-on-surface-variant">
+                                            {photo.photoDesc}
+                                          </p>
+                                        )}
+                                        <div
+                                          className="mt-auto self-start"
+                                          onClick={(eventTrigger) =>
+                                            eventTrigger.stopPropagation()
+                                          }
+                                          onKeyDown={(eventTrigger) =>
+                                            eventTrigger.stopPropagation()
+                                          }
+                                        >
+                                          <LikeButton
+                                            label={`Like photo: ${photo.photoTitle || event.eventTitle}`}
+                                            icon="favorite"
+                                            storageKey={`event-photo-${event.eventId}-${index}`}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="event-photo-card-face event-photo-card-back rounded-xl border border-primary/25 bg-surface-container-low p-4">
+                                      <div className="flex h-full flex-col gap-3 overflow-y-auto">
+                                        <h4 className="font-label-lg font-bold text-on-surface">
+                                          {photo.photoTitle || event.eventTitle}
+                                        </h4>
+                                        <p className="font-body-sm text-sm leading-relaxed text-on-surface-variant">
+                                          {photo.photoFullDesc ||
+                                            photo.fullDescription ||
+                                            photo.photoDescription ||
+                                            photoFullDescriptions[
+                                              photo.photoTitle
+                                            ] ||
+                                            photo.photoDesc ||
+                                            event.eventDesc}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </article>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {event.videos.length > 0 && (
+                        <div>
+                          <h4 className="mb-3 flex items-center gap-2 font-label-lg text-label-lg font-bold text-on-surface">
+                            <span
+                              className="material-symbols-outlined text-[18px] text-secondary"
+                              aria-hidden="true"
+                            >
+                              video_library
+                            </span>
+                            Event Videos
+                          </h4>
+                          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            {event.videos.map((video, index) => (
+                              <article
+                                key={`${event.eventId}-video-${index}`}
+                                className="overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest"
+                              >
+                                {video.videoEmbed ? (
+                                  <iframe
+                                    src={video.videoEmbed}
+                                    title={video.videoTitle || event.eventTitle}
+                                    className="aspect-video w-full bg-black"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                  />
+                                ) : video.videoSrc ? (
+                                  <video
+                                    src={video.videoSrc}
+                                    className="aspect-video w-full bg-black"
+                                    controls
+                                    preload="metadata"
+                                    playsInline
+                                    aria-label={
+                                      video.videoTitle || event.eventTitle
                                     }
                                   >
-                                    <LikeButton
-                                      label={`Like photo: ${photo.photoTitle || event.eventTitle}`}
-                                      icon="favorite"
-                                      storageKey={`event-photo-${event.eventId}-${index}`}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="event-photo-card-face event-photo-card-back rounded-xl border border-primary/25 bg-surface-container-low p-4">
-                                <div className="flex h-full flex-col gap-3 overflow-y-auto">
-                                  <h4 className="font-label-lg font-bold text-on-surface">
-                                    {photo.photoTitle || event.eventTitle}
-                                  </h4>
-                                  <p className="font-body-sm text-sm leading-relaxed text-on-surface-variant">
-                                    {photo.photoFullDesc ||
-                                      photo.fullDescription ||
-                                      photo.photoDescription ||
-                                      photoFullDescriptions[photo.photoTitle] ||
-                                      photo.photoDesc ||
-                                      event.eventDesc}
-                                  </p>
-                                </div>
-                              </div>
-                            </article>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {event.videos.length > 0 && (
-                    <div>
-                      <h4 className="mb-3 flex items-center gap-2 font-label-lg text-label-lg font-bold text-on-surface">
-                        <span
-                          className="material-symbols-outlined text-[18px] text-secondary"
-                          aria-hidden="true"
-                        >
-                          video_library
-                        </span>
-                        Event Videos
-                      </h4>
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {event.videos.map((video, index) => (
-                          <article
-                            key={`${event.eventId}-video-${index}`}
-                            className="overflow-hidden rounded-xl border border-surface-container-high/60 bg-surface-container-lowest"
-                          >
-                            {video.videoEmbed ? (
-                              <iframe
-                                src={video.videoEmbed}
-                                title={video.videoTitle || event.eventTitle}
-                                className="aspect-video w-full bg-black"
-                                loading="lazy"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                              />
-                            ) : video.videoSrc ? (
-                              <video
-                                src={video.videoSrc}
-                                className="aspect-video w-full bg-black"
-                                controls
-                                preload="metadata"
-                                playsInline
-                                aria-label={
-                                  video.videoTitle || event.eventTitle
-                                }
-                              >
-                                Your browser does not support embedded videos.
-                              </video>
-                            ) : (
-                              <a
-                                href={video.videoLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex aspect-video items-center justify-center gap-3 bg-inverse-surface px-4 text-center font-semibold text-white transition-colors hover:bg-primary"
-                              >
-                                <span
-                                  className="material-symbols-outlined text-4xl"
-                                  aria-hidden="true"
-                                >
-                                  play_circle
-                                </span>
-                                <span>
-                                  {video.videoTitle || "Watch event video"}
-                                </span>
-                              </a>
-                            )}
-                            {(video.videoTitle ||
-                              video.videoDesc ||
-                              video.videoDescription) && (
-                              <div className="p-4">
-                                {video.videoTitle && (
-                                  <h5 className="font-label-lg font-bold text-on-surface">
-                                    {video.videoTitle}
-                                  </h5>
+                                    Your browser does not support embedded
+                                    videos.
+                                  </video>
+                                ) : (
+                                  <a
+                                    href={video.videoLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex aspect-video items-center justify-center gap-3 bg-inverse-surface px-4 text-center font-semibold text-white transition-colors hover:bg-primary"
+                                  >
+                                    <span
+                                      className="material-symbols-outlined text-4xl"
+                                      aria-hidden="true"
+                                    >
+                                      play_circle
+                                    </span>
+                                    <span>
+                                      {video.videoTitle || "Watch event video"}
+                                    </span>
+                                  </a>
                                 )}
-                                {(video.videoDesc ||
+                                {(video.videoTitle ||
+                                  video.videoDesc ||
                                   video.videoDescription) && (
-                                  <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">
-                                    {video.videoDesc || video.videoDescription}
-                                  </p>
+                                  <div className="p-4">
+                                    {video.videoTitle && (
+                                      <h5 className="font-label-lg font-bold text-on-surface">
+                                        {video.videoTitle}
+                                      </h5>
+                                    )}
+                                    {(video.videoDesc ||
+                                      video.videoDescription) && (
+                                      <p className="mt-1 text-sm leading-relaxed text-on-surface-variant">
+                                        {video.videoDesc ||
+                                          video.videoDescription}
+                                      </p>
+                                    )}
+                                  </div>
                                 )}
-                              </div>
-                            )}
-                          </article>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </article>
+                              </article>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </article>
                   ))}
                 </>
               )}
