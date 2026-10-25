@@ -1468,8 +1468,8 @@
 
 .photo-marquee-item {
   flex: none;
-  width: 18rem;
-  height: 12rem;
+  width: 20rem;
+  height: 26rem;
   overflow: hidden;
   border-radius: 0.875rem;
   box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
@@ -1497,9 +1497,13 @@
 
 @media (max-width: 640px) {
   .photo-marquee-item {
-    width: 14rem;
-    height: 10rem;
+    width: 15rem;
+    height: 20rem;
   }
+}
+
+.photo-marquee-item img {
+  object-position: top;
 }
 
 @media (prefers-reduced-motion: reduce) {

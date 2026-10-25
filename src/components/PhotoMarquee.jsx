@@ -3,6 +3,7 @@ import ZoomableImage from "./ZoomableImage";
 import useConfetti from "./useConfetti";
 
 const HOVER_COOLDOWN_MS = 1800;
+const MIN_SET_SIZE = 6;
 
 export default function PhotoMarquee({ photos, label }) {
   const { fireConfetti, confettiLayer } = useConfetti();
@@ -15,7 +16,9 @@ export default function PhotoMarquee({ photos, label }) {
     fireConfetti(element);
   };
 
-  const loop = [...photos, ...photos];
+  const repeats = Math.max(1, Math.ceil(MIN_SET_SIZE / photos.length));
+  const set = Array.from({ length: repeats }, () => photos).flat();
+  const loop = [...set, ...set];
 
   return (
     <div className="photo-marquee" role="group" aria-label={label}>

@@ -9,19 +9,43 @@ export default function BackgroundMusic() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    let cancelled = false;
+    const events = ['pointerdown', 'keydown', 'touchstart', 'wheel', 'scroll'];
+
+    const removeListeners = () => {
+      events.forEach((name) => window.removeEventListener(name, startOnInteraction));
+    };
+
+    function startOnInteraction() {
+      audio.play()
+        .then(() => {
+          if (cancelled) return;
+          setIsPlaying(true);
+          setPlaybackError('');
+          removeListeners();
+        })
+        .catch(() => {});
+    }
+
     audio.play()
       .then(() => {
-        setIsPlaying(true);
+        if (!cancelled) setIsPlaying(true);
       })
       .catch((error) => {
+        if (cancelled) return;
         if (error.name === 'NotAllowedError') {
-          setPlaybackError('Autoplay was blocked. Tap Play Music to start the song.');
+          events.forEach((name) => window.addEventListener(name, startOnInteraction, { passive: true }));
           return;
         }
 
         console.error('Unable to autoplay background music:', error);
         setPlaybackError('Music could not be played. Please use the music button to try again.');
       });
+
+    return () => {
+      cancelled = true;
+      removeListeners();
+    };
   }, []);
 
   const togglePlayback = async () => {

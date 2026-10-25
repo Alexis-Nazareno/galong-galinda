@@ -74,6 +74,11 @@ const featuredGalleryEvents = [
         photoDesc:
           "Participants practice sports officiating skills during a hands-on training session.",
       },
+      ...[1, 2, 3, 4].map((n) => ({
+        imgSrc: `/gallery/sports-officiating-${n}.jpg`,
+        photoTitle: "Sport Officiating",
+        photoDesc: "Sports officiating in action.",
+      })),
     ],
     videos: [],
   },
@@ -101,6 +106,15 @@ const featuredGalleryEvents = [
   },
 ];
 
+const MARQUEE_CATEGORIES = ["PE Days", "Sports Officiating", "Seminars & Workshops"];
+
+const seminarTarpaulinPhotos = [
+  { imgSrc: "/gallery/art-of-the-call-tarpaulin.jpg" },
+];
+const seminarExtraPhotos = Array.from({ length: 18 }, (_, index) => ({
+  imgSrc: `/gallery/seminar-workshop-${index + 1}.jpg`,
+}));
+
 const photoFullDescriptions = {
   "Sepak Takraw Officiating":
     "Sports officials help ensure the Sepak Takraw game is conducted fairly and according to the rules. They monitor serves, rallies, and scoring, make quick and impartial decisions, and keep the match safe and orderly while modeling sportsmanship, teamwork, and respect for every player on the court.",
@@ -123,6 +137,9 @@ const peDaysExtraPhotos = [
   { imgSrc: "/gallery/pe-days-2026-1.jpg" },
 
   { imgSrc: "/gallery/pe-days-2026-3.jpg" },
+  ...Array.from({ length: 11 }, (_, index) => ({
+    imgSrc: `/gallery/pe-days-2026-${index + 4}.jpg`,
+  })),
 ];
 
 export default function Events() {
@@ -258,7 +275,12 @@ export default function Events() {
             event.eventId === "seminars-and-officiating"
               ? {
                   ...event,
-                  photos: [...event.photos, ...seminarWorkshopPhotos],
+                  photos: [
+                    ...seminarTarpaulinPhotos,
+                    ...event.photos,
+                    ...seminarWorkshopPhotos,
+                    ...seminarExtraPhotos,
+                  ],
                 }
               : event,
           ),
@@ -526,10 +548,24 @@ export default function Events() {
                       >
                         <div className="flex flex-col gap-3">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span
-                              className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}
-                            >
-                              {item.status || "Upcoming"}
+                            <span className="flex flex-wrap items-center gap-2">
+                              <span
+                                className={`rounded-full px-3 py-1 font-label-badge text-[10px] font-bold uppercase ${item.eventId === "bped-web-fusion" ? "bped-event-badge" : item.eventId === "ibm-days-manawari-2026" ? "ibm-event-badge" : "bg-secondary/10 text-secondary"}`}
+                              >
+                                {item.status || "Upcoming"}
+                              </span>
+                              {item.eventId === "bped-web-fusion" && (
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 font-label-badge text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                                  <span
+                                    className="relative flex h-2 w-2"
+                                    aria-hidden="true"
+                                  >
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                                  </span>
+                                  Happening Now
+                                </span>
+                              )}
                             </span>
                             <span className="flex items-center gap-1 font-label text-xs text-on-surface-variant">
                               <span
@@ -731,10 +767,10 @@ export default function Events() {
                             </span>
                             Event Photos
                           </h4>
-                          {event.category === "PE Days" ? (
+                          {MARQUEE_CATEGORIES.includes(event.category) ? (
                             <PhotoMarquee
                               photos={event.photos}
-                              label="PE Days 2026 photo"
+                              label={`${event.eventTitle.trim()} photo`}
                             />
                           ) : (
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
